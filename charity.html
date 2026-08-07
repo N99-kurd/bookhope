@@ -633,7 +633,7 @@ const isFavorited = userFavorites.includes(book.firestoreId);
                 <p class="text-[9px] md:text-xs text-gray-500 mb-1 line-clamp-1">${author}</p>
                 <div class="mb-1 flex flex-wrap gap-0.5">${genreTag}</div>
                 <div class="flex-1"></div>
-                <button onclick="openDetailsModal('${book.firestoreId}')" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-1 rounded-md font-medium text-[10px] md:text-xs">Details</button>
+                <button onclick="openDetailsModal('${book.firestoreId}')" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-1 rounded-md font-medium text-[10px] md:text-xs">${translations[currentLanguage].detailsBtn}</button>
             </div>
         `;
         grid.appendChild(card);
