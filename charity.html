@@ -187,8 +187,8 @@
             </div>
             <div>
                 <h4 class="font-semibold mb-4" id="contactUs">Contact Us</h4>
-                <p class="text-gray-400 text-sm">📧 <a href="mailto:kurd.kurd@gmail.com" class="hover:text-white">kurd.kurd@gmail.com</a></p>
-                <p class="text-gray-400 text-sm">📞 <a href="tel:07507091790" class="hover:text-white">07500989876</a></p>
+                <p class="text-gray-400 text-sm">📧 <a href="mailto:n000.nnnn@gmail.com" class="hover:text-white">kurd.kurd@gmail.com</a></p>
+                <p class="text-gray-400 text-sm">📞 <a href="tel:0000000000" class="hover:text-white">0000000000</a></p>
             </div>
             <div>
                 <h4 class="font-semibold mb-4" id="quickLinks">Quick Links</h4>
@@ -559,20 +559,29 @@ function filterGenre(genre) {
 
     renderBooks();
 }
-
 function renderGenreButtons() {
     const row = document.getElementById('genreFilterRow');
-    const genres = [...new Set(books.map(b => b.genre).filter(g => g))];
+    const genreKeys = [...new Set(books.map(b => b.genre).filter(g => g))];
 
     row.innerHTML = '<button onclick="filterGenre(\'all\')" id="genreAll" class="px-4 py-1.5 rounded-full bg-gray-800 text-white text-sm font-medium">All Genres</button>';
 
-    genres.forEach(genre => {
-        const safeId = 'genre' + genre.replace(/[^a-zA-Z0-9]/g, '');
-        const translatedGenre = (genreTranslations[currentLanguage] && genreTranslations[currentLanguage][genre]) ? genreTranslations[currentLanguage][genre] : genre;
+    genreKeys.forEach(genreKey => {
+        const bookWithGenre = books.find(b => b.genre === genreKey);
+        let translatedGenre = genreKey;
+
+        if (genreTranslations[currentLanguage] && genreTranslations[currentLanguage][genreKey]) {
+            translatedGenre = genreTranslations[currentLanguage][genreKey];
+        } else if (currentLanguage === 'ar' && bookWithGenre.genre_ar) {
+            translatedGenre = bookWithGenre.genre_ar;
+        } else if (currentLanguage === 'ku' && bookWithGenre.genre_ku) {
+            translatedGenre = bookWithGenre.genre_ku;
+        }
+
+        const safeId = 'genre' + genreKey.replace(/[^a-zA-Z0-9]/g, '');
         const btn = document.createElement('button');
         btn.id = safeId;
-        btn.dataset.genreKey = genre;
-        btn.onclick = () => filterGenre(genre);
+        btn.dataset.genreKey = genreKey;
+        btn.onclick = () => filterGenre(genreKey);
         btn.className = 'px-4 py-1.5 rounded-full bg-gray-200 text-gray-700 text-sm font-medium';
         btn.textContent = translatedGenre;
         row.appendChild(btn);
@@ -601,7 +610,16 @@ const isFavorited = userFavorites.includes(book.firestoreId);
         const heartIcon = '♥';
         const heartColor = isFavorited ? 'color: #dc2626;' : 'color: #d1d5db;';
 
-        const translatedGenre = book.genre ? ((genreTranslations[currentLanguage] && genreTranslations[currentLanguage][book.genre]) ? genreTranslations[currentLanguage][book.genre] : book.genre) : '';
+        let translatedGenre = book.genre;
+        if (book.genre) {
+            if (genreTranslations[currentLanguage] && genreTranslations[currentLanguage][book.genre]) {
+                translatedGenre = genreTranslations[currentLanguage][book.genre];
+            } else if (currentLanguage === 'ar' && book.genre_ar) {
+                translatedGenre = book.genre_ar;
+            } else if (currentLanguage === 'ku' && book.genre_ku) {
+                translatedGenre = book.genre_ku;
+            }
+        }
         const genreTag = book.genre ? '<span class="inline-block bg-blue-50 text-blue-700 text-xs font-medium px-2 py-1 rounded-full mr-1">' + translatedGenre + '</span>' : '';
         const statusTag = '<span class="inline-block bg-green-50 text-green-700 text-xs font-medium px-2 py-1 rounded-full">Available</span>';
 
