@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookHope - Book Charity Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Amiri:wght@400;700&family=Noto+Sans+Arabic:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        [lang="ar"], [lang="ku"] {
+            font-family: 'Noto Sans Arabic', 'Amiri', serif;
+            direction: rtl;
+        }
+
+        .hero-gradient {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+        }
+
+        .card-hover:hover {
+            transform: translateY(-5px);
+            transition: transform 0.3s ease;
+        }
+        .hero-text {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+}
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .book-badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    padding: 2px 10px;
+    border-radius: 9999px;
+    font-size: 11px;
+    font-weight: 600;
+    color: white;
+}
+
+.badge-new { background: #059669; }
+.badge-classic { background: #d97706; }
+.badge-popular { background: #dc2626;}
+        
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="bg-white shadow-sm sticky top-0 z-50">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+        <h1 class="text-xl md:text-2xl font-bold text-blue-600">📚 BookHope</h1>
+
+        <!-- Desktop nav (hidden on mobile) -->
+        <nav class="hidden md:flex items-center gap-6 text-gray-700 font-medium">
+            <a href="#" class="hover:text-blue-600">Home</a>
+            <a href="#booksSection" class="hover:text-blue-600">Browse Books</a>
+        </nav>
+
+        <!-- Desktop right side (hidden on mobile) -->
+        <div class="hidden md:flex items-center gap-3">
+            <div class="flex items-center gap-2">
+                <button onclick="switchLanguage('en')" id="btnEN" class="px-3 py-1 rounded bg-blue-600 text-white flex items-center gap-1 text-sm">
+                    <img src="https://flagcdn.com/w20/gb.png" class="w-5 h-auto"> EN
+                </button>
+                <button onclick="switchLanguage('ar')" id="btnAR" class="px-3 py-1 rounded bg-gray-200 text-gray-700 flex items-center gap-1 text-sm">
+                    <img src="https://flagcdn.com/w20/iq.png" class="w-5 h-auto"> AR
+                </button>
+                <button onclick="switchLanguage('ku')" id="btnKU" class="px-3 py-1 rounded bg-gray-200 text-gray-700 flex items-center gap-1 text-sm">
+                    <img src="https://flagcdn.com/w20/iq.png" class="w-5 h-auto"> KU
+                </button>
+            </div>
+            <div id="authSection" class="flex items-center gap-3">
+                <button onclick="openAuthModal('login')" id="loginBtn" class="px-4 py-1.5 rounded bg-gray-200 text-gray-700 font-medium">Log In</button>
+                <button onclick="openAuthModal('signup')" id="signupBtn" class="px-4 py-1.5 rounded bg-blue-600 text-white font-medium">Sign Up</button>
+                <div id="userInfo" class="hidden items-center gap-2">
+                    <span id="userEmail" class="text-gray-700 text-sm"></span>
+                    <button onclick="openFavoritesModal()" class="px-3 py-1.5 rounded bg-pink-100 hover:bg-pink-200 text-pink-700 font-medium text-sm">♥️ Favorites</button>
+                    <button onclick="handleLogOut()" class="px-3 py-1.5 rounded bg-red-600 hover:bg-red-700 text-white font-medium text-sm">Log Out</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile hamburger button -->
+        <button onclick="toggleMobileMenu()" class="md:hidden text-gray-700 text-2xl">☰</button>
+    </div>
+
+    <!-- Mobile dropdown menu -->
+    <div id="mobileMenu" class="hidden md:hidden bg-white border-t px-4 py-4 space-y-4">
+        <div class="flex gap-2">
+            <button onclick="switchLanguage('en')" id="btnEN_m" class="px-3 py-1 rounded bg-blue-600 text-white flex items-center gap-1 text-sm">
+                <img src="https://flagcdn.com/w20/gb.png" class="w-5 h-auto"> EN
+            </button>
+            <button onclick="switchLanguage('ar')" id="btnAR_m" class="px-3 py-1 rounded bg-gray-200 text-gray-700 flex items-center gap-1 text-sm">
+                <img src="https://flagcdn.com/w20/iq.png" class="w-5 h-auto"> AR
+            </button>
+            <button onclick="switchLanguage('ku')" id="btnKU_m" class="px-3 py-1 rounded bg-gray-200 text-gray-700 flex items-center gap-1 text-sm">
+                <img src="https://flagcdn.com/w20/iq.png" class="w-5 h-auto"> KU
+            </button>
+        </div>
+
+        <div id="authSection_m" class="flex flex-col gap-2">
+            <button onclick="openAuthModal('login')" id="loginBtn_m" class="w-full px-4 py-2 rounded bg-gray-200 text-gray-700 font-medium">Log In</button>
+            <button onclick="openAuthModal('signup')" id="signupBtn_m" class="w-full px-4 py-2 rounded bg-blue-600 text-white font-medium">Sign Up</button>
+            <div id="userInfo_m" class="hidden flex-col gap-2">
+                <span id="userEmail_m" class="text-gray-700 text-sm"></span>
+                <button onclick="openFavoritesModal()" class="w-full px-4 py-2 rounded bg-pink-100 hover:bg-pink-200 text-pink-700 font-medium">♥️ My Favorites</button>
+                <button onclick="handleLogOut()" class="w-full px-4 py-2 rounded bg-red-600 hover:bg-red-700 text-white font-medium">Log Out</button>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Hero Section -->
+<section class="hero-gradient py-12 md:py-20">
+    <div class="container mx-auto px-4 grid md:grid-cols-2 gap-8 md:gap-10 items-center">
+        <div class="text-center md:text-left">
+            <h2 class="text-2xl sm:text-3xl md:text-5xl font-bold mb-4 text-gray-900 leading-tight" id="heroTitle">Share Knowledge, Change Lives</h2>
+            <p class="text-base md:text-xl text-gray-600 mb-6 md:mb-8" id="heroDesc">Browse our collection of books and request the ones you love. We'll send them to you!</p>
+            <button onclick="scrollToBooks()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 md:px-8 py-3 text-base md:text-lg rounded-lg shadow-md" id="browseBtn">Browse Books</button>
+        </div>
+        <div class="flex justify-center text-6xl md:text-8xl">📚</div>
+    </div>
+</section>
+<!-- Books Section -->
+<section id="booksSection" class="py-20 bg-white">
+    <div class="container mx-auto px-4">
+        <h2 class="text-4xl font-bold text-center mb-4 text-gray-900" id="availableBooksTitle">Available Books</h2>
+        <p class="text-center text-gray-600 mb-12" id="clickToRequest">Click on a book to request it</p>
+        <div class="flex flex-wrap justify-center gap-3 mb-10">
+            <button onclick="filterCategory('all')" id="catAll" class="px-5 py-2 rounded-full bg-blue-600 text-white font-medium">All</button>
+            <button onclick="filterCategory('kurdish')" id="catKurdish" class="px-5 py-2 rounded-full bg-gray-200 text-gray-700 font-medium">Kurdish</button>
+            <button onclick="filterCategory('arabic')" id="catArabic" class="px-5 py-2 rounded-full bg-gray-200 text-gray-700 font-medium">Arabic</button>
+            <button onclick="filterCategory('turkish')" id="catTurkish" class="px-5 py-2 rounded-full bg-gray-200 text-gray-700 font-medium">Turkish</button>
+            <button onclick="filterCategory('english')" id="catEnglish" class="px-5 py-2 rounded-full bg-gray-200 text-gray-700 font-medium">English</button>
+        </div>
+        <!-- Search Bar -->
+<div class="max-w-2xl mx-auto mb-8 px-4">
+    <div class="relative">
+        <input 
+    type="text" 
+    id="searchInput" 
+    name="book-search-query"
+    autocomplete="new-password"
+    readonly
+    onfocus="this.removeAttribute('readonly')"
+    placeholder="🔍 Search by title, author, or genre..." 
+    class="w-full px-6 py-3 pl-12 pr-12 text-gray-700 bg-gray-50 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+    onkeyup="searchBooks()" >
+        <svg class="absolute left-4 top-3.5 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+        <button onclick="clearSearch()" id="clearSearchBtn" class="absolute right-4 top-3.5 text-gray-400 hover:text-gray-600 hidden">
+            ✕
+        </button>
+    </div>
+</div>
+        <div class="flex flex-wrap justify-center gap-3 mb-10" id="genreFilterRow">
+            <button onclick="filterGenre('all')" id="genreAll" class="px-4 py-1.5 rounded-full bg-gray-800 text-white text-sm font-medium">All Genres</button>
+        </div> 
+        <div id="booksGrid" class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-4">
+            <!-- Books will be inserted here by JavaScript -->
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-gray-900 text-white py-12">
+    <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+            <div>
+                <h3 class="text-xl font-bold mb-2">❤️ BookHope</h3>
+                <p class="text-gray-400 text-sm" id="footerTagline">Share Knowledge, Change Lives</p>
+            </div>
+            <div>
+                <h4 class="font-semibold mb-4" id="contactUs">Contact Us</h4>
+                <p class="text-gray-400 text-sm">📧 <a href="mailto:kurd.kurd@gmail.com" class="hover:text-white">kurd.kurd@gmail.com</a></p>
+                <p class="text-gray-400 text-sm">📞 <a href="tel:07507091790" class="hover:text-white">07500989876</a></p>
+            </div>
+            <div>
+                <h4 class="font-semibold mb-4" id="quickLinks">Quick Links</h4>
+                <ul class="space-y-2 text-sm text-gray-400">
+                    <li><a href="#" class="hover:text-white" id="footerHome">Home</a></li>
+                    <li><a href="#booksSection" class="hover:text-white" id="footerBooks">Browse Books</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-semibold mb-4" id="followUs">Follow Us</h4>
+                <div class="flex gap-4">
+                    <a href="#" class="text-gray-400 hover:text-white">f</a>
+                    <a href="#" class="text-gray-400 hover:text-white">𝕏</a>
+                    <a href="#" class="text-gray-400 hover:text-white">📷</a>
+                </div>
+            </div>
+        </div>
+        <div class="border-t border-gray-800 pt-8">
+            <p class="text-center text-gray-400 text-sm" id="copyright">© 2024 BookHope. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+<!-- Favorites Modal -->
+<div id="favoritesModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-lg p-6 w-full max-w-3xl max-h-[80vh] overflow-y-auto">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold">♥ My Favorites</h2>
+            <button onclick="closeFavoritesModal()" class="text-gray-500 hover:text-gray-700 text-2xl">✕</button>
+        </div>
+        <div id="favoritesGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+    </div>
+</div>
+<!-- Auth Modal -->
+<div id="authModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-lg p-6 w-full max-w-md">
+        <h2 id="authModalTitle" class="text-2xl font-bold mb-4">Log In</h2>
+
+        <div class="space-y-4">
+            <input type="email" id="authEmail" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="Email">
+            <input type="password" id="authPassword" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="Password">
+
+            <button onclick="handleEmailAuth()" id="authSubmitBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium">Log In</button>
+
+            <div class="flex items-center gap-2">
+                <div class="flex-1 border-t border-gray-300"></div>
+                <span class="text-gray-500 text-sm">or</span>
+                <div class="flex-1 border-t border-gray-300"></div>
+            </div>
+
+            <button onclick="handleGoogleAuth()" class="w-full bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 py-2 rounded-lg font-medium flex items-center justify-center gap-2">
+                <img src="https://www.google.com/favicon.ico" class="w-5 h-5"> Continue with Google
+            </button>
+
+            <p id="authSwitchText" class="text-center text-sm text-gray-600">
+                Don't have an account? <a href="#" onclick="switchAuthMode(); return false;" class="text-blue-600 font-medium">Sign Up</a>
+            </p>
+
+            <button onclick="closeAuthModal()" class="w-full bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 rounded-lg font-medium">Cancel</button>
+        </div>
+    </div>
+</div>
+<!-- Book Details Modal -->
+<div id="detailsModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-lg p-6 w-full max-w-md">
+        <div class="flex justify-between items-start mb-4">
+            <h2 class="text-2xl font-bold flex-1 pr-2" id="detailsTitle">Book Title</h2>
+            <div class="flex items-center gap-2">
+                <button onclick="handleModalFavorite()" id="detailsHeartBtn" class="text-2xl">🤍</button>
+                <button onclick="closeDetailsModal()" class="text-gray-500 hover:text-gray-700 text-2xl">✕</button>
+            </div>
+        </div>
+        <img id="detailsImage" src="" alt="" class="w-full h-64 object-contain bg-gray-100 rounded mb-4">
+        <p class="text-gray-600 mb-2"><span class="font-semibold" id="detailsAuthorLabel">Author:</span> <span id="detailsAuthor"></span></p>
+        <p class="text-gray-700 mb-4" id="detailsDesc"></p>
+        <div id="detailsActionArea"></div>
+    </div>
+</div>
+<!-- Request Modal -->
+<div id="requestModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-lg p-6 w-full max-w-md">
+        <h2 class="text-2xl font-bold mb-4" id="requestTitle">Request Book</h2>
+        <div id="bookDetails" class="mb-4"></div>
+
+        <div class="space-y-4">
+            <input type="text" id="requesterName" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="Your name">
+            <textarea id="requesterAddress" class="w-full px-4 py-2 border border-gray-300 rounded-lg" rows="3" placeholder="Shipping address"></textarea>
+
+            <div class="flex gap-2">
+                <button onclick="submitRequest()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium">Submit</button>
+                <button onclick="closeRequestModal()" class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 rounded-lg font-medium">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script type="module" src="data.js"></script>
+
+<script type="module">
+ import { translations, loadBooks, loadRequests, addRequestToDb, signUp, logIn, logInWithGoogle, logOut, watchAuthState, toggleFavorite, loadUserFavorites, genreTranslations } from './data.js';
+window.onerror = function(message, source, lineno, colno, error) {
+    alert("ERROR: " + message + " (line " + lineno + ")");
+};
+let currentLanguage = "en";
+    let books = [];
+    let requests = [];
+    let selectedBookForRequest = null;
+    let authMode = 'login';
+    let currentUser = null;
+    let userFavorites = [];
+
+    window.addEventListener('DOMContentLoaded', async function() {
+        books = await loadBooks();
+        renderGenreButtons();
+        requests = await loadRequests();
+        renderBooks();
+        AOS.init({ duration: 800, once: true });
+
+        watchAuthState(async function(user) {
+            currentUser = user;
+            updateAuthUI();
+            if (currentUser) {
+                userFavorites = await loadUserFavorites(currentUser.uid);
+            } else {
+                userFavorites = [];
+            }
+            renderBooks();
+        });
+    });
+
+    function updateAuthUI() {
+        const loginBtn = document.getElementById('loginBtn');
+        const signupBtn = document.getElementById('signupBtn');
+        const userInfo = document.getElementById('userInfo');
+        const userEmail = document.getElementById('userEmail');
+
+        const loginBtn_m = document.getElementById('loginBtn_m');
+        const signupBtn_m = document.getElementById('signupBtn_m');
+        const userInfo_m = document.getElementById('userInfo_m');
+        const userEmail_m = document.getElementById('userEmail_m');
+
+        if (currentUser) {
+            loginBtn.classList.add('hidden');
+            signupBtn.classList.add('hidden');
+            userInfo.classList.remove('hidden');
+            userInfo.classList.add('flex');
+            userEmail.textContent = currentUser.email;
+
+            loginBtn_m.classList.add('hidden');
+            signupBtn_m.classList.add('hidden');
+            userInfo_m.classList.remove('hidden');
+            userInfo_m.classList.add('flex');
+            userEmail_m.textContent = currentUser.email;
+        } else {
+            loginBtn.classList.remove('hidden');
+            signupBtn.classList.remove('hidden');
+            userInfo.classList.add('hidden');
+            userInfo.classList.remove('flex');
+
+            loginBtn_m.classList.remove('hidden');
+            signupBtn_m.classList.remove('hidden');
+            userInfo_m.classList.add('hidden');
+            userInfo_m.classList.remove('flex');
+        }
+    }
+    function toggleMobileMenu() {
+        document.getElementById('mobileMenu').classList.toggle('hidden');
+    }
+    async function handleToggleFavorite(bookId, event) {
+        event.stopPropagation();
+
+        if (!currentUser) {
+            alert('Please log in to save favorites');
+            openAuthModal('login');
+            return;
+        }
+
+        const isNowFavorited = await toggleFavorite(currentUser.uid, bookId);
+
+        if (isNowFavorited) {
+            userFavorites.push(bookId);
+        } else {
+            userFavorites = userFavorites.filter(id => id !== bookId);
+        }
+
+        renderBooks();
+    }
+    function openFavoritesModal() {
+        if (!currentUser) {
+            alert('Please log in to view favorites');
+            openAuthModal('login');
+            return;
+        }
+        renderFavorites();
+        document.getElementById('favoritesModal').classList.remove('hidden');
+    }
+
+    function closeFavoritesModal() {
+        document.getElementById('favoritesModal').classList.add('hidden');
+    }
+
+    function renderFavorites() {
+        const grid = document.getElementById('favoritesGrid');
+        grid.innerHTML = '';
+
+        const favoriteBooks = books.filter(book => userFavorites.includes(book.firestoreId));
+
+        if (favoriteBooks.length === 0) {
+            grid.innerHTML = '<p class="text-gray-600 col-span-2 text-center py-8">You haven\'t favorited any books yet.</p>';
+            return;
+        }
+
+        favoriteBooks.forEach(book => {
+            const title = book['title_' + currentLanguage];
+            const author = book['author_' + currentLanguage];
+            const card = document.createElement('div');
+            card.className = 'bg-gray-50 rounded-lg shadow p-4 flex gap-4';
+            card.innerHTML = `
+                <img src="${book.image_url}" alt="${title}" class="w-20 h-28 object-contain bg-white rounded flex-shrink-0">
+                <div class="flex-1">
+                    <h3 class="font-bold text-base mb-1 line-clamp-2">${title}</h3>
+                    <p class="text-sm text-gray-600 mb-3">${translations[currentLanguage].author}: ${author}</p>
+                    <div class="flex gap-2">
+                        <button onclick="closeFavoritesModal(); openRequestModal('${book.firestoreId}')" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded text-sm font-medium">${translations[currentLanguage].requestBtn}</button>
+                        <button onclick="handleToggleFavorite('${book.firestoreId}', event)" style="${heartColor} position: absolute; top: 4px; right: 4px; background: white; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 3px rgba(0,0,0,0.3); font-size: 9px; z-index: 10; padding: 0; line-height: 1;" class="md:w-9 md:h-9 md:text-xl">${heartIcon}</button>
+                    </div>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    function openAuthModal(mode) {
+        authMode = mode;
+        document.getElementById('authModal').classList.remove('hidden');
+        updateAuthModalMode();
+    }
+
+    function closeAuthModal() {
+        document.getElementById('authModal').classList.add('hidden');
+        document.getElementById('authEmail').value = '';
+        document.getElementById('authPassword').value = '';
+    }
+
+    function switchAuthMode() {
+        authMode = authMode === 'login' ? 'signup' : 'login';
+        updateAuthModalMode();
+    }
+
+    function updateAuthModalMode() {
+        const title = document.getElementById('authModalTitle');
+        const submitBtn = document.getElementById('authSubmitBtn');
+        const switchText = document.getElementById('authSwitchText');
+
+        if (authMode === 'login') {
+            title.textContent = 'Log In';
+            submitBtn.textContent = 'Log In';
+            switchText.innerHTML = 'Don\'t have an account? <a href="#" onclick="switchAuthMode(); return false;" class="text-blue-600 font-medium">Sign Up</a>';
+        } else {
+            title.textContent = 'Sign Up';
+            submitBtn.textContent = 'Sign Up';
+            switchText.innerHTML = 'Already have an account? <a href="#" onclick="switchAuthMode(); return false;" class="text-blue-600 font-medium">Log In</a>';
+        }
+    }
+
+    async function handleEmailAuth() {
+        const email = document.getElementById('authEmail').value;
+        const password = document.getElementById('authPassword').value;
+
+        if (!email || !password) {
+            alert('Please fill in all fields');
+            return;
+        }
+
+        try {
+            if (authMode === 'login') {
+                await logIn(email, password);
+            } else {
+                await signUp(email, password);
+            }
+            closeAuthModal();
+        } catch (error) {
+            alert(error.message);
+        }
+    }
+
+    async function handleGoogleAuth() {
+        try {
+            await logInWithGoogle();
+            closeAuthModal();
+        } catch (error) {
+            alert(error.message);
+        }
+    }
+
+    async function handleLogOut() {
+        await logOut();
+    }
+    function switchLanguage(lang) {
+        currentLanguage = lang;
+
+        document.getElementById('btnEN').className = lang === 'en' ? 'px-3 py-1 rounded bg-blue-600 text-white flex items-center gap-1 text-sm' : 'px-3 py-1 rounded bg-gray-200 text-gray-700 flex items-center gap-1 text-sm';
+document.getElementById('btnAR').className = lang === 'ar' ? 'px-3 py-1 rounded bg-blue-600 text-white flex items-center gap-1 text-sm' : 'px-3 py-1 rounded bg-gray-200 text-gray-700 flex items-center gap-1 text-sm';
+document.getElementById('btnKU').className = lang === 'ku' ? 'px-3 py-1 rounded bg-blue-600 text-white flex items-center gap-1 text-sm' : 'px-3 py-1 rounded bg-gray-200 text-gray-700 flex items-center gap-1 text-sm';
+
+document.getElementById('btnEN_m').className = lang === 'en' ? 'px-3 py-1 rounded bg-blue-600 text-white flex items-center gap-1 text-sm' : 'px-3 py-1 rounded bg-gray-200 text-gray-700 flex items-center gap-1 text-sm';
+document.getElementById('btnAR_m').className = lang === 'ar' ? 'px-3 py-1 rounded bg-blue-600 text-white flex items-center gap-1 text-sm' : 'px-3 py-1 rounded bg-gray-200 text-gray-700 flex items-center gap-1 text-sm';
+document.getElementById('btnKU_m').className = lang === 'ku' ? 'px-3 py-1 rounded bg-blue-600 text-white flex items-center gap-1 text-sm' : 'px-3 py-1 rounded bg-gray-200 text-gray-700 flex items-center gap-1 text-sm';
+        const isRTL = lang === 'ar' || lang === 'ku';
+        document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
+        document.body.dir = isRTL ? 'rtl' : 'ltr';
+
+        const t = translations[lang];
+        document.getElementById('heroTitle').textContent = t.heroTitle;
+        document.getElementById('heroDesc').textContent = t.heroDesc;
+        document.getElementById('browseBtn').textContent = t.browseBtn;
+        document.getElementById('availableBooksTitle').textContent = t.availableBooksTitle;
+        document.getElementById('clickToRequest').textContent = t.clickToRequest;
+        document.getElementById('contactUs').textContent = t.contactUs;
+        document.getElementById('quickLinks').textContent = t.quickLinks;
+        document.getElementById('followUs').textContent = t.followUs;
+        document.getElementById('footerHome').textContent = t.footerHome;
+        document.getElementById('footerBooks').textContent = t.footerBooks;
+        document.getElementById('footerTagline').textContent = t.footerTagline;
+        document.getElementById('copyright').textContent = t.copyright;
+        document.getElementById('requestTitle').textContent = t.requestTitle;
+
+        renderGenreButtons();
+renderBooks();
+    }    
+    let currentCategory = 'all';
+    let currentGenre = 'all';
+    function scrollToBooks() {
+    document.getElementById('booksSection').scrollIntoView({ behavior: 'smooth' });
+}
+function filterCategory(category) {
+    currentCategory = category;
+
+    const buttons = {
+        all: 'catAll',
+        kurdish: 'catKurdish',
+        arabic: 'catArabic',
+        turkish: 'catTurkish',
+        english: 'catEnglish'
+    };
+
+    Object.keys(buttons).forEach(key => {
+        const btn = document.getElementById(buttons[key]);
+        if (key === category) {
+            btn.className = 'px-5 py-2 rounded-full bg-blue-600 text-white font-medium';
+        } else {
+            btn.className = 'px-5 py-2 rounded-full bg-gray-200 text-gray-700 font-medium';
+        }
+    });
+
+    renderBooks();
+}
+function filterGenre(genre) {
+    currentGenre = genre;
+
+    document.querySelectorAll('#genreFilterRow button').forEach(btn => {
+        if (btn.id === 'genre' + genre.replace(/[^a-zA-Z0-9]/g, '')) {
+            btn.className = 'px-4 py-1.5 rounded-full bg-gray-800 text-white text-sm font-medium';
+        } else {
+            btn.className = 'px-4 py-1.5 rounded-full bg-gray-200 text-gray-700 text-sm font-medium';
+        }
+    });
+
+    renderBooks();
+}
+
+function renderGenreButtons() {
+    const row = document.getElementById('genreFilterRow');
+    const genres = [...new Set(books.map(b => b.genre).filter(g => g))];
+
+    row.innerHTML = '<button onclick="filterGenre(\'all\')" id="genreAll" class="px-4 py-1.5 rounded-full bg-gray-800 text-white text-sm font-medium">All Genres</button>';
+
+    genres.forEach(genre => {
+        const safeId = 'genre' + genre.replace(/[^a-zA-Z0-9]/g, '');
+        const translatedGenre = (genreTranslations[currentLanguage] && genreTranslations[currentLanguage][genre]) ? genreTranslations[currentLanguage][genre] : genre;
+        const btn = document.createElement('button');
+        btn.id = safeId;
+        btn.dataset.genreKey = genre;
+        btn.onclick = () => filterGenre(genre);
+        btn.className = 'px-4 py-1.5 rounded-full bg-gray-200 text-gray-700 text-sm font-medium';
+        btn.textContent = translatedGenre;
+        row.appendChild(btn);
+    });
+}
+function renderBooks() {
+    const grid = document.getElementById('booksGrid');
+    grid.innerHTML = '';
+       
+    let filteredBooks = currentCategory === 'all'
+    ? books
+    : books.filter(book => book.category === currentCategory);
+
+if (currentGenre !== 'all') {
+    filteredBooks = filteredBooks.filter(book => book.genre === currentGenre);
+}
+filteredBooks.forEach(book => {
+        const title = book['title_' + currentLanguage];
+        const author = book['author_' + currentLanguage];
+        const card = document.createElement('div');
+        card.className = 'bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow overflow-hidden card-hover fade-in border border-gray-100 flex flex-col';
+        const badgeLabel = book.badge && book.badge !== 'none' ? book.badge : '';
+const badgeClass = badgeLabel === 'Classic' ? 'badge-classic' : (badgeLabel === 'Popular' ? 'badge-popular' : 'badge-new');
+const badgeHTML = badgeLabel ? ('<span class="book-badge ' + badgeClass + '">' + badgeLabel + '</span>') : '';
+const isFavorited = userFavorites.includes(book.firestoreId);
+        const heartIcon = '♥';
+        const heartColor = isFavorited ? 'color: #dc2626;' : 'color: #d1d5db;';
+
+        const translatedGenre = book.genre ? ((genreTranslations[currentLanguage] && genreTranslations[currentLanguage][book.genre]) ? genreTranslations[currentLanguage][book.genre] : book.genre) : '';
+        const genreTag = book.genre ? '<span class="inline-block bg-blue-50 text-blue-700 text-xs font-medium px-2 py-1 rounded-full mr-1">' + translatedGenre + '</span>' : '';
+        const statusTag = '<span class="inline-block bg-green-50 text-green-700 text-xs font-medium px-2 py-1 rounded-full">Available</span>';
+
+        card.innerHTML = `
+    <div class="relative">
+        ${badgeHTML}
+        <img src="${book.image_url}" alt="${title}" class="w-full h-24 md:h-40 object-contain bg-gray-50">
+    </div>
+    <div class="p-1.5 md:p-3 flex flex-col flex-1">
+                <h3 class="font-bold text-[10px] md:text-sm mb-0.5 line-clamp-2 leading-tight">${title}</h3>
+                <p class="text-[9px] md:text-xs text-gray-500 mb-1 line-clamp-1">${author}</p>
+                <div class="mb-1 flex flex-wrap gap-0.5">${genreTag}</div>
+                <div class="flex-1"></div>
+                <button onclick="openDetailsModal('${book.firestoreId}')" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-1 rounded-md font-medium text-[10px] md:text-xs">Details</button>
+            </div>
+        `;
+        grid.appendChild(card);
+    });
+}
+function searchBooks() {
+    const query = document.getElementById('searchInput').value.toLowerCase().trim();
+    document.getElementById('clearSearchBtn').classList.toggle('hidden', query === '');
+
+    const grid = document.getElementById('booksGrid');
+    grid.innerHTML = '';
+
+    let filteredBooks = currentCategory === 'all'
+        ? books
+        : books.filter(book => book.category === currentCategory);
+
+    if (currentGenre !== 'all') {
+        filteredBooks = filteredBooks.filter(book => book.genre === currentGenre);
+    }
+
+    if (query !== '') {
+    filteredBooks = filteredBooks.filter(book => {
+        const titleEN = (book.title_en || '').toLowerCase();
+        const titleAR = (book.title_ar || '').toLowerCase();
+        const titleKU = (book.title_ku || '').toLowerCase();
+        const authorEN = (book.author_en || '').toLowerCase();
+        const authorAR = (book.author_ar || '').toLowerCase();
+        const authorKU = (book.author_ku || '').toLowerCase();
+        const genre = (book.genre || '').toLowerCase();
+        return titleEN.includes(query) || titleAR.includes(query) || titleKU.includes(query)
+        || authorEN.includes(query) || authorAR.includes(query) || authorKU.includes(query)
+            || genre.includes(query);
+    });
+}
+
+    filteredBooks.forEach(book => {
+        const title = book['title_' + currentLanguage];
+        const author = book['author_' + currentLanguage];
+        const card = document.createElement('div');
+        card.className = 'bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer overflow-hidden card-hover fade-in';
+        const badgeLabel = book.badge && book.badge !== 'none' ? book.badge : '';
+        const badgeClass = badgeLabel === 'Classic' ? 'badge-classic' : (badgeLabel === 'Popular' ? 'badge-popular' : 'badge-new');
+        const badgeHTML = badgeLabel ? ('<span class="book-badge ' + badgeClass + '">' + badgeLabel + '</span>') : '';
+        card.innerHTML = `
+            <div class="relative">
+                ${badgeHTML}
+                <img src="${book.image_url}" alt="${title}" class="w-full h-64 object-contain bg-gray-100">
+            </div>
+            <div class="p-4">
+                <h3 class="font-bold text-lg mb-2 line-clamp-2">${title}</h3>
+                <p class="text-sm text-gray-600 mb-4">${translations[currentLanguage].author}: ${author}</p>
+                <button onclick="openRequestModal('${book.firestoreId}')" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded font-medium">${translations[currentLanguage].requestBtn}</button>
+            </div>
+        `;
+        grid.appendChild(card);
+    });
+}
+
+function clearSearch() {
+    document.getElementById('searchInput').value = '';
+    document.getElementById('clearSearchBtn').classList.add('hidden');
+    renderBooks();
+}
+
+function openRequestModal(firestoreId) {
+        if (!currentUser) {
+            alert('Please log in or sign up to request a book');
+            openAuthModal('login');
+            return;
+        }
+
+        selectedBookForRequest = books.find(b => b.firestoreId === firestoreId);
+        const book = selectedBookForRequest;
+        const title = book['title_' + currentLanguage];
+        const author = book['author_' + currentLanguage];
+
+        document.getElementById('bookDetails').innerHTML = `
+            <h3 class="font-bold text-lg">${title}</h3>
+            <p class="text-gray-600">${translations[currentLanguage].author}: ${author}</p>
+        `;
+
+        document.getElementById('requestModal').classList.remove('hidden');
+    }
+    let currentDetailsBookId = null;
+
+function openDetailsModal(firestoreId) {
+    const book = books.find(b => b.firestoreId === firestoreId);
+    if (!book) return;
+
+    currentDetailsBookId = firestoreId;
+
+    const title = book['title_' + currentLanguage];
+    const author = book['author_' + currentLanguage];
+    const desc = book['desc_' + currentLanguage] || '';
+
+    document.getElementById('detailsTitle').textContent = title;
+    document.getElementById('detailsImage').src = book.image_url;
+    document.getElementById('detailsImage').alt = title;
+    document.getElementById('detailsAuthorLabel').textContent = translations[currentLanguage].author + ':';
+    document.getElementById('detailsAuthor').textContent = author;
+    document.getElementById('detailsDesc').textContent = desc;
+
+    const heartBtn = document.getElementById('detailsHeartBtn');
+    const isFav = userFavorites.includes(firestoreId);
+    heartBtn.textContent = isFav ? '❤️' : '🤍';
+
+        const actionArea = document.getElementById('detailsActionArea');
+        if (currentUser) {
+            actionArea.innerHTML = '<button onclick="closeDetailsModal(); openRequestModal(\'' + book.firestoreId + '\')" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded font-medium">' + translations[currentLanguage].requestBtn + '</button>';
+        } else {
+            actionArea.innerHTML = '<button onclick="closeDetailsModal(); openAuthModal(\'login\')" class="w-full bg-gray-700 hover:bg-gray-800 text-white py-2 rounded font-medium">Log in to request this book</button>';
+        }
+
+        document.getElementById('detailsModal').classList.remove('hidden');
+    }
+
+async function handleModalFavorite() {
+        if (!currentUser) {
+            alert('Please log in to save favorites');
+            closeDetailsModal();
+            openAuthModal('login');
+            return;
+        }
+
+        const isNowFavorited = await toggleFavorite(currentUser.uid, currentDetailsBookId);
+
+        if (isNowFavorited) {
+            userFavorites.push(currentDetailsBookId);
+        } else {
+            userFavorites = userFavorites.filter(id => id !== currentDetailsBookId);
+        }
+
+        document.getElementById('detailsHeartBtn').textContent = isNowFavorited ? '❤️' : '🤍';
+    }
+    function closeDetailsModal() {
+        document.getElementById('detailsModal').classList.add('hidden');
+    }
+    function closeRequestModal() {
+        document.getElementById('requestModal').classList.add('hidden');
+        document.getElementById('requesterName').value = '';
+        document.getElementById('requesterAddress').value = '';
+    }
+
+    async function submitRequest() {
+        const name = document.getElementById('requesterName').value;
+        const address = document.getElementById('requesterAddress').value;
+
+        if (!name || !address) {
+            alert('Please fill in all fields');
+            return;
+        }
+
+        const request = {
+            book_id: selectedBookForRequest.firestoreId,
+            book_title: selectedBookForRequest['title_' + currentLanguage],
+            requester_name: name,
+            requester_address: address,
+            date: new Date().toLocaleDateString()
+        };
+
+        await addRequestToDb(request);
+        alert(translations[currentLanguage].successMessage);
+        closeRequestModal();
+    }
+
+    window.switchLanguage = switchLanguage;
+    window.filterCategory = filterCategory;
+    window.filterGenre = filterGenre;  
+    window.scrollToBooks = scrollToBooks;
+    window.openRequestModal = openRequestModal;
+    window.closeRequestModal = closeRequestModal;
+    window.submitRequest = submitRequest;
+    window.openAuthModal = openAuthModal;
+    window.closeAuthModal = closeAuthModal;
+    window.switchAuthMode = switchAuthMode;
+    window.handleEmailAuth = handleEmailAuth;
+    window.handleGoogleAuth = handleGoogleAuth;
+    window.handleLogOut = handleLogOut;
+    window.handleToggleFavorite = handleToggleFavorite;
+    window.openDetailsModal = openDetailsModal;
+window.closeDetailsModal = closeDetailsModal;
+    window.openFavoritesModal = openFavoritesModal;
+window.closeFavoritesModal = closeFavoritesModal;
+window.renderFavorites = renderFavorites;
+window.handleModalFavorite = handleModalFavorite;
+    // Make functions globally accessible
+window.switchLanguage = switchLanguage;
+window.filterCategory = filterCategory;
+window.filterGenre = filterGenre;
+window.scrollToBooks = scrollToBooks;
+window.openRequestModal = openRequestModal;
+window.closeRequestModal = closeRequestModal;
+window.submitRequest = submitRequest;
+window.openAuthModal = openAuthModal;
+    window.closeAuthModal = closeAuthModal;
+    window.switchAuthMode = switchAuthMode;
+    window.handleEmailAuth = handleEmailAuth;
+    window.handleGoogleAuth = handleGoogleAuth;
+    window.handleLogOut = handleLogOut;
+    window.handleToggleFavorite = handleToggleFavorite;
+    window.openDetailsModal = openDetailsModal;
+window.closeDetailsModal = closeDetailsModal;
+    window.openFavoritesModal = openFavoritesModal;
+window.closeFavoritesModal = closeFavoritesModal;
+window.renderFavorites = renderFavorites;
+window.searchBooks = searchBooks;
+window.clearSearch = clearSearch;
+window.toggleMobileMenu = toggleMobileMenu;
+window.handleModalFavorite = handleModalFavorite;
+</script>
+
+</body>
+</html>
