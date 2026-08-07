@@ -111,7 +111,11 @@
                                 <option value="Self-Help">Self-Help</option>
                                 <option value="other">Other (type below)</option>
                             </select>
-                            <input type="text" id="customGenre" placeholder="Type custom genre" class="hidden w-full px-4 py-2 border border-gray-300 rounded-lg mt-2">
+                            <div id="customGenreFields" class="hidden mt-2 space-y-2">
+                                <input type="text" id="customGenreEN" placeholder="Genre name (English)" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                                <input type="text" id="customGenreAR" placeholder="Genre name (Arabic)" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                                <input type="text" id="customGenreKU" placeholder="Genre name (Kurdish)" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                            </div>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Badge Label</label>
@@ -274,9 +278,11 @@
             desc_ar: document.getElementById('descAR').value,
             desc_ku: document.getElementById('descKU').value,
             image_url: selectedImageBase64,
-category: document.getElementById('bookCategory').value,
+            category: document.getElementById('bookCategory').value,
 badge: document.getElementById('bookBadge').value,
-genre: document.getElementById('bookGenre').value === 'other' ? document.getElementById('customGenre').value : document.getElementById('bookGenre').value
+genre: document.getElementById('bookGenre').value === 'other' ? document.getElementById('customGenreEN').value : document.getElementById('bookGenre').value,
+genre_ar: document.getElementById('bookGenre').value === 'other' ? document.getElementById('customGenreAR').value : '',
+genre_ku: document.getElementById('bookGenre').value === 'other' ? document.getElementById('customGenreKU').value : ''
     };
 
         if (!bookData.title_en || !bookData.author_en) {
@@ -315,16 +321,19 @@ genre: document.getElementById('bookGenre').value === 'other' ? document.getElem
         document.getElementById('descKU').value = '';
         document.getElementById('imageFile').value = '';
         document.getElementById('imagePreview').classList.add('hidden');
+        document.getElementById('customGenreEN').value = '';
+        document.getElementById('customGenreAR').value = '';
+        document.getElementById('customGenreKU').value = '';
         selectedImageBase64 = '';
         editingBookId = null;
     }
     function toggleCustomGenre() {
     const genreSelect = document.getElementById('bookGenre');
-    const customInput = document.getElementById('customGenre');
+    const customFields = document.getElementById('customGenreFields');
     if (genreSelect.value === 'other') {
-        customInput.classList.remove('hidden');
+        customFields.classList.remove('hidden');
     } else {
-        customInput.classList.add('hidden');
+        customFields.classList.add('hidden');
     }
 }
     function editBook(firestoreId) {
@@ -347,14 +356,16 @@ genre: document.getElementById('bookGenre').value === 'other' ? document.getElem
         const knownGenres = ['Medical', 'History', 'Religion', 'Novels/Fiction', "Children's Books", 'Self-Help'];
 if (book.genre && knownGenres.includes(book.genre)) {
     document.getElementById('bookGenre').value = book.genre;
-    document.getElementById('customGenre').classList.add('hidden');
+    document.getElementById('customGenreFields').classList.add('hidden');
 } else if (book.genre) {
     document.getElementById('bookGenre').value = 'other';
-    document.getElementById('customGenre').value = book.genre;
-    document.getElementById('customGenre').classList.remove('hidden');
+    document.getElementById('customGenreEN').value = book.genre;
+    document.getElementById('customGenreAR').value = book.genre_ar || '';
+    document.getElementById('customGenreKU').value = book.genre_ku || '';
+    document.getElementById('customGenreFields').classList.remove('hidden');
 } else {
     document.getElementById('bookGenre').value = 'Medical';
-    document.getElementById('customGenre').classList.add('hidden');
+    document.getElementById('customGenreFields').classList.add('hidden');
 }
         selectedImageBase64 = book.image_url;
         const preview = document.getElementById('imagePreview');
