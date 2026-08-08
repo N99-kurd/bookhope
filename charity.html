@@ -88,6 +88,7 @@
                 <button onclick="openAuthModal('signup')" id="signupBtn" class="px-4 py-1.5 rounded bg-blue-600 text-white font-medium">Sign Up</button>
                 <div id="userInfo" class="hidden items-center gap-2">
                     <span id="userEmail" class="text-gray-700 text-sm"></span>
+                    <button onclick="openCartModal()" class="relative px-3 py-1.5 rounded bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium text-sm">Cart <span id="cartCount" class="hidden absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span></button>
                     <button onclick="openFavoritesModal()" class="px-3 py-1.5 rounded bg-pink-100 hover:bg-pink-200 text-pink-700 font-medium text-sm">♥️ Favorites</button>
                     <button onclick="handleLogOut()" class="px-3 py-1.5 rounded bg-red-600 hover:bg-red-700 text-white font-medium text-sm">Log Out</button>
                 </div>
@@ -117,6 +118,7 @@
             <button onclick="openAuthModal('signup')" id="signupBtn_m" class="w-full px-4 py-2 rounded bg-blue-600 text-white font-medium">Sign Up</button>
             <div id="userInfo_m" class="hidden flex-col gap-2">
                 <span id="userEmail_m" class="text-gray-700 text-sm"></span>
+                <button onclick="openCartModal()" class="w-full px-4 py-2 rounded bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium">Cart (<span id="cartCount_m">0</span>)</button>
                 <button onclick="openFavoritesModal()" class="w-full px-4 py-2 rounded bg-pink-100 hover:bg-pink-200 text-pink-700 font-medium">♥️ My Favorites</button>
                 <button onclick="handleLogOut()" class="w-full px-4 py-2 rounded bg-red-600 hover:bg-red-700 text-white font-medium">Log Out</button>
             </div>
@@ -221,17 +223,43 @@
         <div id="favoritesGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
     </div>
 </div>
+<!-- Cart Modal -->
+<div id="cartModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[80vh] overflow-y-auto">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold">My Cart</h2>
+            <button onclick="closeCartModal()" class="text-gray-500 hover:text-gray-700 text-2xl">✕</button>
+        </div>
+        <div id="cartGrid" class="space-y-4 mb-6"></div>
+        <div id="cartTotalArea" class="border-t pt-4 hidden">
+            <p class="text-xl font-bold text-right mb-4">Total: <span id="cartTotal">0</span> د.ع</p>
+            <input type="text" id="cartName" class="w-full px-4 py-2 border border-gray-300 rounded-lg mb-2" placeholder="Your name">
+            <input type="tel" id="cartPhone" class="w-full px-4 py-2 border border-gray-300 rounded-lg mb-2" placeholder="Phone number">
+            <textarea id="cartAddress" class="w-full px-4 py-2 border border-gray-300 rounded-lg mb-4" rows="2" placeholder="Shipping address"></textarea>
+            <button onclick="submitCartOrder()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium">Submit Order</button>
+        </div>
+    </div>
+</div>
 <!-- Auth Modal -->
 <div id="authModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
     <div class="bg-white rounded-lg p-6 w-full max-w-md">
         <h2 id="authModalTitle" class="text-2xl font-bold mb-4">Log In</h2>
 
         <div class="space-y-4">
-            <input type="text" id="authName" class="hidden w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="Your Name">
-            <input type="tel" id="authPhone" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="Phone Number">
+            <input type="email" id="authEmail" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="Email">
             <input type="password" id="authPassword" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="Password">
 
-            <button onclick="handleAuth()" id="authSubmitBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium">Log In</button>
+            <button onclick="handleEmailAuth()" id="authSubmitBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium">Log In</button>
+
+            <div class="flex items-center gap-2">
+                <div class="flex-1 border-t border-gray-300"></div>
+                <span class="text-gray-500 text-sm">or</span>
+                <div class="flex-1 border-t border-gray-300"></div>
+            </div>
+
+            <button onclick="handleGoogleAuth()" class="w-full bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 py-2 rounded-lg font-medium flex items-center justify-center gap-2">
+                <img src="https://www.google.com/favicon.ico" class="w-5 h-5"> Continue with Google
+            </button>
 
             <p id="authSwitchText" class="text-center text-sm text-gray-600">
                 Don't have an account? <a href="#" onclick="switchAuthMode(); return false;" class="text-blue-600 font-medium">Sign Up</a>
@@ -265,8 +293,8 @@
 
         <div class="space-y-4">
             <input type="text" id="requesterName" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="Your name">
+            <input type="tel" id="requesterPhone" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="Phone number">
             <textarea id="requesterAddress" class="w-full px-4 py-2 border border-gray-300 rounded-lg" rows="3" placeholder="Shipping address"></textarea>
-
             <div class="flex gap-2">
                 <button onclick="submitRequest()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium">Submit</button>
                 <button onclick="closeRequestModal()" class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 rounded-lg font-medium">Cancel</button>
@@ -279,7 +307,7 @@
 <script type="module" src="data.js"></script>
 
 <script type="module">
- import { translations, loadBooks, loadRequests, addRequestToDb, signUp, logIn, logOut, watchAuthState, toggleFavorite, loadUserFavorites, genreTranslations } from './data.js';
+import { translations, loadBooks, loadRequests, addRequestToDb, signUp, logIn, logInWithGoogle, logOut, watchAuthState, toggleFavorite, loadUserFavorites, genreTranslations, addToCart, removeFromCart, loadUserCart, clearUserCart } from './data.js';
 window.onerror = function(message, source, lineno, colno, error) {
     alert("ERROR: " + message + " (line " + lineno + ")");
 };
@@ -290,6 +318,7 @@ let currentLanguage = "en";
     let authMode = 'login';
     let currentUser = null;
     let userFavorites = [];
+    let userCart = [];
 
     window.addEventListener('DOMContentLoaded', async function() {
         books = await loadBooks();
@@ -303,9 +332,12 @@ let currentLanguage = "en";
             updateAuthUI();
             if (currentUser) {
                 userFavorites = await loadUserFavorites(currentUser.uid);
+                userCart = await loadUserCart(currentUser.uid);
             } else {
                 userFavorites = [];
+                userCart = [];
             }
+            updateCartCount();
             renderBooks();
         });
     });
@@ -326,7 +358,7 @@ let currentLanguage = "en";
             signupBtn.classList.add('hidden');
             userInfo.classList.remove('hidden');
             userInfo.classList.add('flex');
-            userEmail.textContent = currentUser.displayName;
+            userEmail.textContent = currentUser.email;
 
             loginBtn_m.classList.add('hidden');
             signupBtn_m.classList.add('hidden');
@@ -417,11 +449,9 @@ let currentLanguage = "en";
         document.getElementById('authModal').classList.remove('hidden');
         updateAuthModalMode();
     }
-
     function closeAuthModal() {
         document.getElementById('authModal').classList.add('hidden');
-        document.getElementById('authName').value = '';
-        document.getElementById('authPhone').value = '';
+        document.getElementById('authEmail').value = '';
         document.getElementById('authPassword').value = '';
     }
 
@@ -434,41 +464,41 @@ let currentLanguage = "en";
         const title = document.getElementById('authModalTitle');
         const submitBtn = document.getElementById('authSubmitBtn');
         const switchText = document.getElementById('authSwitchText');
-        const nameField = document.getElementById('authName');
 
         if (authMode === 'login') {
             title.textContent = 'Log In';
             submitBtn.textContent = 'Log In';
-            nameField.classList.add('hidden');
             switchText.innerHTML = 'Don\'t have an account? <a href="#" onclick="switchAuthMode(); return false;" class="text-blue-600 font-medium">Sign Up</a>';
         } else {
             title.textContent = 'Sign Up';
             submitBtn.textContent = 'Sign Up';
-            nameField.classList.remove('hidden');
             switchText.innerHTML = 'Already have an account? <a href="#" onclick="switchAuthMode(); return false;" class="text-blue-600 font-medium">Log In</a>';
         }
     }
-
-    async function handleAuth() {
-        const phone = document.getElementById('authPhone').value;
+    async function handleEmailAuth() {
+        const email = document.getElementById('authEmail').value;
         const password = document.getElementById('authPassword').value;
 
-        if (!phone || !password) {
+        if (!email || !password) {
             alert('Please fill in all fields');
             return;
         }
 
         try {
             if (authMode === 'login') {
-                await logIn(phone, password);
+                await logIn(email, password);
             } else {
-                const name = document.getElementById('authName').value;
-                if (!name) {
-                    alert('Please enter your name');
-                    return;
-                }
-                await signUp(name, phone, password);
+                await signUp(email, password);
             }
+            closeAuthModal();
+        } catch (error) {
+            alert(error.message);
+        }
+    }
+
+    async function handleGoogleAuth() {
+        try {
+            await logInWithGoogle();
             closeAuthModal();
         } catch (error) {
             alert(error.message);
@@ -734,14 +764,13 @@ function openDetailsModal(firestoreId) {
     const heartBtn = document.getElementById('detailsHeartBtn');
     const isFav = userFavorites.includes(firestoreId);
     heartBtn.textContent = isFav ? '❤️' : '🤍';
-
-        const actionArea = document.getElementById('detailsActionArea');
+    const actionArea2 = document.getElementById('detailsActionArea');
+    const actionArea = document.getElementById('detailsActionArea');
         if (currentUser) {
-            actionArea.innerHTML = '<button onclick="closeDetailsModal(); openRequestModal(\'' + book.firestoreId + '\')" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded font-medium">' + translations[currentLanguage].requestBtn + '</button>';
+            actionArea.innerHTML = '<div class="space-y-2"><button onclick="handleAddToCart()" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded font-medium">Add to Cart</button>'
         } else {
             actionArea.innerHTML = '<button onclick="closeDetailsModal(); openAuthModal(\'login\')" class="w-full bg-gray-700 hover:bg-gray-800 text-white py-2 rounded font-medium">Log in to request this book</button>';
         }
-
         document.getElementById('detailsModal').classList.remove('hidden');
     }
 
@@ -763,20 +792,143 @@ async function handleModalFavorite() {
 
         document.getElementById('detailsHeartBtn').textContent = isNowFavorited ? '❤️' : '🤍';
     }
+    function updateCartCount() {
+        const count = userCart.length;
+        const cartCount = document.getElementById('cartCount');
+        const cartCount_m = document.getElementById('cartCount_m');
+
+        if (count > 0) {
+            cartCount.textContent = count;
+            cartCount.classList.remove('hidden');
+        } else {
+            cartCount.classList.add('hidden');
+        }
+        cartCount_m.textContent = count;
+    }
+
+    async function handleAddToCart() {
+        if (!currentUser) {
+            alert('Please log in to add items to your cart');
+            closeDetailsModal();
+            openAuthModal('login');
+            return;
+        }
+
+        if (userCart.includes(currentDetailsBookId)) {
+            alert('This book is already in your cart');
+            return;
+        }
+
+        await addToCart(currentUser.uid, currentDetailsBookId);
+        userCart.push(currentDetailsBookId);
+        updateCartCount();
+        alert('Added to cart!');
+    }
+
+    function openCartModal() {
+        if (!currentUser) {
+            alert('Please log in to view your cart');
+            openAuthModal('login');
+            return;
+        }
+        renderCart();
+        document.getElementById('cartModal').classList.remove('hidden');
+    }
+
+    function closeCartModal() {
+        document.getElementById('cartModal').classList.add('hidden');
+    }
+
+    function renderCart() {
+        const grid = document.getElementById('cartGrid');
+        const totalArea = document.getElementById('cartTotalArea');
+        grid.innerHTML = '';
+
+        const cartBooks = books.filter(book => userCart.includes(book.firestoreId));
+
+        if (cartBooks.length === 0) {
+            grid.innerHTML = '<p class="text-gray-600 text-center py-8">Your cart is empty.</p>';
+            totalArea.classList.add('hidden');
+            return;
+        }
+
+        let total = 0;
+        cartBooks.forEach(book => {
+            total = total + (book.price || 0);
+            const title = book['title_' + currentLanguage];
+            const item = document.createElement('div');
+            item.className = 'flex gap-4 items-center border-b pb-4';
+            item.innerHTML = '<img src="' + book.image_url + '" alt="' + title + '" class="w-16 h-20 object-contain bg-gray-50 rounded">' +
+                '<div class="flex-1"><h3 class="font-bold text-sm">' + title + '</h3><p class="text-blue-600 font-bold text-sm">' + (book.price || 0).toLocaleString() + ' د.ع</p></div>' +
+                '<button onclick="removeCartItem(\'' + book.firestoreId + '\')" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-1.5 rounded text-sm font-medium">Remove</button>';
+            grid.appendChild(item);
+        });
+
+        document.getElementById('cartTotal').textContent = total.toLocaleString();
+        totalArea.classList.remove('hidden');
+    }
+
+    async function removeCartItem(bookId) {
+        await removeFromCart(currentUser.uid, bookId);
+        userCart = userCart.filter(id => id !== bookId);
+        updateCartCount();
+        renderCart();
+    }
+
+    async function submitCartOrder() {
+        const name = document.getElementById('cartName').value;
+        const phone = document.getElementById('cartPhone').value;
+        const address = document.getElementById('cartAddress').value;
+
+        if (!name || !phone || !address) {
+            alert('Please fill in all fields');
+            return;
+        }
+
+        const cartBooks = books.filter(book => userCart.includes(book.firestoreId));
+        let total = 0;
+        const titles = [];
+        cartBooks.forEach(book => {
+            total = total + (book.price || 0);
+            titles.push(book['title_' + currentLanguage]);
+        });
+
+        const request = {
+            book_id: 'multiple',
+            book_title: titles.join(', '),
+            requester_name: name,
+            requester_phone: phone,
+            requester_address: address,
+            total_price: total,
+            date: new Date().toLocaleDateString()
+        };
+
+        await addRequestToDb(request);
+        await clearUserCart(currentUser.uid, userCart);
+        userCart = [];
+        updateCartCount();
+        document.getElementById('cartName').value = '';
+        document.getElementById('cartPhone').value = '';
+        document.getElementById('cartAddress').value = '';
+        alert('Order submitted successfully!');
+        closeCartModal();
+    } 
     function closeDetailsModal() {
         document.getElementById('detailsModal').classList.add('hidden');
     }
     function closeRequestModal() {
         document.getElementById('requestModal').classList.add('hidden');
         document.getElementById('requesterName').value = '';
+        document.getElementById('requesterPhone').value = '';
         document.getElementById('requesterAddress').value = '';
     }
 
     async function submitRequest() {
         const name = document.getElementById('requesterName').value;
+        const phone = document.getElementById('requesterPhone').value;
         const address = document.getElementById('requesterAddress').value;
 
-        if (!name || !address) {
+        if (!name || !phone || !address) {
             alert('Please fill in all fields');
             return;
         }
@@ -785,10 +937,10 @@ async function handleModalFavorite() {
             book_id: selectedBookForRequest.firestoreId,
             book_title: selectedBookForRequest['title_' + currentLanguage],
             requester_name: name,
+            requester_phone: phone,
             requester_address: address,
             date: new Date().toLocaleDateString()
         };
-
         await addRequestToDb(request);
         alert(translations[currentLanguage].successMessage);
         closeRequestModal();
@@ -804,7 +956,8 @@ async function handleModalFavorite() {
     window.openAuthModal = openAuthModal;
     window.closeAuthModal = closeAuthModal;
     window.switchAuthMode = switchAuthMode;
-    window.handleAuth = handleAuth;
+    window.handleEmailAuth = handleEmailAuth;
+    window.handleGoogleAuth = handleGoogleAuth;
     window.handleLogOut = handleLogOut;
     window.handleToggleFavorite = handleToggleFavorite;
     window.openDetailsModal = openDetailsModal;
@@ -813,6 +966,11 @@ window.closeDetailsModal = closeDetailsModal;
 window.closeFavoritesModal = closeFavoritesModal;
 window.renderFavorites = renderFavorites;
 window.handleModalFavorite = handleModalFavorite;
+window.openCartModal = openCartModal;
+window.closeCartModal = closeCartModal;
+window.handleAddToCart = handleAddToCart;
+window.removeCartItem = removeCartItem;
+window.submitCartOrder = submitCartOrder;
     // Make functions globally accessible
 window.switchLanguage = switchLanguage;
 window.filterCategory = filterCategory;
@@ -824,7 +982,7 @@ window.submitRequest = submitRequest;
 window.openAuthModal = openAuthModal;
     window.closeAuthModal = closeAuthModal;
     window.switchAuthMode = switchAuthMode;
-    window.handleAuth = handleAuth;
+
     window.handleLogOut = handleLogOut;
     window.handleToggleFavorite = handleToggleFavorite;
     window.openDetailsModal = openDetailsModal;
@@ -836,6 +994,11 @@ window.searchBooks = searchBooks;
 window.clearSearch = clearSearch;
 window.toggleMobileMenu = toggleMobileMenu;
 window.handleModalFavorite = handleModalFavorite;
+window.openCartModal = openCartModal;
+window.closeCartModal = closeCartModal;
+window.handleAddToCart = handleAddToCart;
+window.removeCartItem = removeCartItem;
+window.submitCartOrder = submitCartOrder;
 </script>
 
 </body>
