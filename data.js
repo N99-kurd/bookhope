@@ -1,7 +1,7 @@
 // ===== FIREBASE SETUP =====
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-app.js";
 import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, updateDoc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-firestore.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-auth.js";
 const firebaseConfig = {
     apiKey: "AIzaSyBU7XDZfTm4rGDH2LxeAYM1oRSXtBCpx8s",
     authDomain: "bookhope-6c62e.firebaseapp.com",
@@ -30,6 +30,8 @@ const translations = {
         quickLinks: "Quick Links",
         followUs: "Follow Us",
         footerHome: "Home",
+        navHome: "Home",
+navBrowse: "Browse Books",
         footerBooks: "Browse Books",
         footerTagline: "Share Knowledge, Change Lives",
         copyright: "© 2024 BookHope. All rights reserved.",
@@ -41,6 +43,7 @@ const translations = {
         bookAdded: "Book added successfully!",
         bookDeleted: "Book deleted successfully!",
         requestDeleted: "Request deleted successfully!",
+        searchPlaceholder: "Search by title, author, or genre...",
     },
     ar: {
         heroTitle: "شارك المعرفة، غيّر الحياة",
@@ -55,6 +58,8 @@ const translations = {
         quickLinks: "روابط سريعة",
         followUs: "تابعنا",
         footerHome: "الرئيسية",
+        navHome: "الرئيسية",
+navBrowse: "تصفح الكتب",
         footerBooks: "تصفح الكتب",
         footerTagline: "شارك المعرفة، غيّر الحياة",
         copyright: "© 2024 بوك هوب. جميع الحقوق محفوظة.",
@@ -66,6 +71,7 @@ const translations = {
         bookAdded: "تم إضافة الكتاب بنجاح!",
         bookDeleted: "تم حذف الكتاب بنجاح!",
         requestDeleted: "تم حذف الطلب بنجاح!",
+        searchPlaceholder: "ابحث بالعنوان أو المؤلف أو النوع...",
     },
     ku: {
         heroTitle: "زانیاری بڵاو بکە، ژیان بگۆڕە",
@@ -80,6 +86,8 @@ const translations = {
         quickLinks: "بەستەرە خێرا",
         followUs: "شوێن بگرە",
         footerHome: "ماڵەوە",
+        navHome: "ماڵەوە",
+navBrowse: "گەڕان لە کتێبەکاندا",
         footerBooks: "گەڕان لە کتێبەکاندا",
         footerTagline: "زانیاری بڵاو بکە، ژیان بگۆڕە",
         copyright: "© 2024 بوک هۆپ. هەموو مافەکان پارێزراون.",
@@ -91,6 +99,7 @@ const translations = {
         bookAdded: "کتێبەکە بە سەرکەوتویی زیادکرا!",
         bookDeleted: "کتێبەکە بە سەرکەوتویی سڕایەوە!",
         requestDeleted: "داواکاری بە سەرکەوتویی سڕایەوە!",
+        searchPlaceholder: "بگەڕێ بە ناونیشان، نووسەر، یان جۆر...",
     }
 };
 const genreTranslations = {
@@ -193,16 +202,22 @@ async function deleteRequestFromDb(firestoreId) {
     await deleteDoc(doc(db, "requests", firestoreId));
 }
 // ===== AUTH FUNCTIONS =====
-async function signUp(email, password) {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+async function signUp(name, phone, password) {
+    const fakeEmail = phone.replace(/[^0-9]/g, '') + '@bookhope.app';
+    const userCredential = await createUserWithEmailAndPassword(auth, fakeEmail, password);
+    await updateProfile(userCredential.user, { displayName: name });
+    await setDoc(doc(db, "users", userCredential.user.uid), {
+        name: name,
+        phone: phone
+    });
     return userCredential.user;
 }
 
-async function logIn(email, password) {
-    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+async function logIn(phone, password) {
+    const fakeEmail = phone.replace(/[^0-9]/g, '') + '@bookhope.app';
+    const userCredential = await signInWithEmailAndPassword(auth, fakeEmail, password);
     return userCredential.user;
 }
-
 async function logInWithGoogle() {
     const provider = new GoogleAuthProvider();
     const userCredential = await signInWithPopup(auth, provider);
