@@ -450,6 +450,7 @@ if (book.genre && knownGenres.includes(book.genre)) {
                     <div class="flex-1">
                         <h3 class="font-bold text-lg">${request.requester_name}</h3>
                         <p class="text-gray-600">Book: ${request.book_title}</p>
+                        <p class="text-gray-600">Phone: ${request.requester_phone || 'Not provided'}</p>
                         <p class="text-gray-600">Address: ${request.requester_address}</p>
                         <p class="text-sm text-gray-500">Date: ${request.date}</p>
                     </div>
