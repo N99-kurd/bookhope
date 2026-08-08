@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ku" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -62,86 +62,64 @@
 <!-- Header -->
 <header class="bg-white shadow-sm sticky top-0 z-50">
     <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-        <h1 class="text-xl md:text-2xl font-bold text-blue-600">📚 BookHope</h1>
-
-        <!-- Desktop nav (hidden on mobile) -->
-        <nav class="hidden md:flex items-center gap-6 text-gray-700 font-medium">
-            <a href="#" id="navHome" class="hover:text-blue-600">Home</a>
-            <a href="#booksSection" id="navBrowse" class="hover:text-blue-600">Browse Books</a>
-        </nav>
-
-        <!-- Desktop right side (hidden on mobile) -->
-        <div class="hidden md:flex items-center gap-3">
-            <div class="flex items-center gap-2">
-                <button onclick="switchLanguage('en')" id="btnEN" class="px-3 py-1 rounded bg-blue-600 text-white flex items-center gap-1 text-sm">
-                    <img src="https://flagcdn.com/w20/gb.png" class="w-5 h-auto"> EN
-                </button>
-                <button onclick="switchLanguage('ar')" id="btnAR" class="px-3 py-1 rounded bg-gray-200 text-gray-700 flex items-center gap-1 text-sm">
-                    <img src="https://flagcdn.com/w20/iq.png" class="w-5 h-auto"> AR
-                </button>
-                <button onclick="switchLanguage('ku')" id="btnKU" class="px-3 py-1 rounded bg-gray-200 text-gray-700 flex items-center gap-1 text-sm">
-                    <img src="https://flagcdn.com/w20/iq.png" class="w-5 h-auto"> KU
-                </button>
-            </div>
-            <div id="authSection" class="flex items-center gap-3">
-                <button onclick="openAuthModal('login')" id="loginBtn" class="px-4 py-1.5 rounded bg-gray-200 text-gray-700 font-medium">Log In</button>
-                <button onclick="openAuthModal('signup')" id="signupBtn" class="px-4 py-1.5 rounded bg-blue-600 text-white font-medium">Sign Up</button>
-                <div id="userInfo" class="hidden items-center gap-2">
-                    <span id="userEmail" class="text-gray-700 text-sm"></span>
-                    <button onclick="openCartModal()" class="relative px-3 py-1.5 rounded bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium text-sm">Cart <span id="cartCount" class="hidden absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span></button>
-                    <button onclick="openFavoritesModal()" class="px-3 py-1.5 rounded bg-pink-100 hover:bg-pink-200 text-pink-700 font-medium text-sm">♥️ Favorites</button>
-                    <button onclick="handleLogOut()" class="px-3 py-1.5 rounded bg-red-600 hover:bg-red-700 text-white font-medium text-sm">Log Out</button>
-                </div>
-            </div>
+        <div class="flex items-center gap-2">
+            <button onclick="toggleMobileMenu()" class="text-gray-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+            </button>
+            <h1 class="text-lg md:text-2xl font-bold"><span class="text-gray-900">Book</span><span class="text-blue-600">Hope</span></h1>
         </div>
 
-        <!-- Mobile hamburger button -->
-        <button onclick="toggleMobileMenu()" class="md:hidden text-gray-700 text-2xl">☰</button>
+        <div class="flex items-center gap-4">
+            <button onclick="focusSearchBar()" class="text-gray-700 hover:text-blue-600">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </button>
+            <button onclick="handleHeartIconClick()" class="text-gray-700 hover:text-pink-600">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"></path></svg>
+            </button>
+            <button onclick="openCartModal()" class="relative text-gray-700 hover:text-blue-600">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                <span id="cartCount" class="hidden absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
+            </button>
+            <button onclick="toggleProfileMenu()" class="text-gray-700 hover:text-blue-600">
+                <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                </div>
+            </button>
+        </div>
     </div>
 
-    <!-- Mobile dropdown menu -->
-    <div id="mobileMenu" class="hidden md:hidden bg-white border-t px-4 py-4 space-y-4">
-        <div class="flex gap-2">
-            <button onclick="switchLanguage('en')" id="btnEN_m" class="px-3 py-1 rounded bg-blue-600 text-white flex items-center gap-1 text-sm">
-                <img src="https://flagcdn.com/w20/gb.png" class="w-5 h-auto"> EN
-            </button>
-            <button onclick="switchLanguage('ar')" id="btnAR_m" class="px-3 py-1 rounded bg-gray-200 text-gray-700 flex items-center gap-1 text-sm">
-                <img src="https://flagcdn.com/w20/iq.png" class="w-5 h-auto"> AR
-            </button>
-            <button onclick="switchLanguage('ku')" id="btnKU_m" class="px-3 py-1 rounded bg-gray-200 text-gray-700 flex items-center gap-1 text-sm">
-                <img src="https://flagcdn.com/w20/iq.png" class="w-5 h-auto"> KU
-            </button>
+    <!-- Profile Dropdown -->
+    <div id="profileDropdown" class="hidden absolute right-4 top-16 bg-white shadow-lg rounded-lg p-4 w-60 z-50 border border-gray-100">
+        <div id="profileLoggedOut" class="space-y-2">
+            <button onclick="openAuthModal('login'); toggleProfileMenu();" class="w-full px-4 py-2 rounded bg-gray-200 text-gray-700 font-medium">Log In</button>
+            <button onclick="openAuthModal('signup'); toggleProfileMenu();" class="w-full px-4 py-2 rounded bg-blue-600 text-white font-medium">Sign Up</button>
         </div>
+        <div id="profileLoggedIn" class="hidden space-y-2">
+            <p id="profileEmail" class="text-gray-700 text-sm text-center pb-2 border-b"></p>
+            <button onclick="openFavoritesModal(); toggleProfileMenu();" class="w-full px-4 py-2 rounded bg-pink-100 hover:bg-pink-200 text-pink-700 font-medium">My Favorites</button>
+            <button onclick="handleLogOut(); toggleProfileMenu();" class="w-full px-4 py-2 rounded bg-red-600 hover:bg-red-700 text-white font-medium">Log Out</button>
+        </div>
+    </div>
 
-        <div id="authSection_m" class="flex flex-col gap-2">
-            <button onclick="openAuthModal('login')" id="loginBtn_m" class="w-full px-4 py-2 rounded bg-gray-200 text-gray-700 font-medium">Log In</button>
-            <button onclick="openAuthModal('signup')" id="signupBtn_m" class="w-full px-4 py-2 rounded bg-blue-600 text-white font-medium">Sign Up</button>
-            <div id="userInfo_m" class="hidden flex-col gap-2">
-                <span id="userEmail_m" class="text-gray-700 text-sm"></span>
-                <button onclick="openCartModal()" class="w-full px-4 py-2 rounded bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium">Cart (<span id="cartCount_m">0</span>)</button>
-                <button onclick="openFavoritesModal()" class="w-full px-4 py-2 rounded bg-pink-100 hover:bg-pink-200 text-pink-700 font-medium">♥️ My Favorites</button>
-                <button onclick="handleLogOut()" class="w-full px-4 py-2 rounded bg-red-600 hover:bg-red-700 text-white font-medium">Log Out</button>
-            </div>
-        </div>
+    <!-- Language pills -->
+    <button onclick="switchLanguage('en')" id="btnEN" class="px-3 py-1.5 rounded-full bg-gray-100 text-gray-700 flex items-center gap-1 text-sm flex-shrink-0">
+        <img src="https://flagcdn.com/w20/gb.png" class="w-5 h-auto"> EN
+    </button>
+    <button onclick="switchLanguage('ar')" id="btnAR" class="px-3 py-1.5 rounded-full bg-gray-100 text-gray-700 flex items-center gap-1 text-sm flex-shrink-0">
+        <img src="https://flagcdn.com/w20/iq.png" class="w-5 h-auto"> AR
+    </button>
+    <button onclick="switchLanguage('ku')" id="btnKU" class="px-3 py-1.5 rounded-full bg-blue-600 text-white flex items-center gap-1 text-sm flex-shrink-0">
+        <img src="https://flagcdn.com/w20/iq.png" class="w-5 h-auto"> KU
+    </button>
     </div>
 </header>
-
 <!-- Hero Section -->
-<section class="hero-gradient py-12 md:py-20">
-    <div class="container mx-auto px-4 grid md:grid-cols-2 gap-8 md:gap-10 items-center">
-        <div class="text-center md:text-left">
-            <h2 class="text-2xl sm:text-3xl md:text-5xl font-bold mb-4 text-gray-900 leading-tight" id="heroTitle">Share Knowledge, Change Lives</h2>
-            <p class="text-base md:text-xl text-gray-600 mb-6 md:mb-8" id="heroDesc">Browse our collection of books and request the ones you love. We'll send them to you!</p>
-            <button onclick="scrollToBooks()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 md:px-8 py-3 text-base md:text-lg rounded-lg shadow-md" id="browseBtn">Browse Books</button>
-        </div>
-        <div class="flex justify-center text-6xl md:text-8xl">📚</div>
-    </div>
-</section>
+
 <!-- Books Section -->
 <section id="booksSection" class="py-20 bg-white">
     <div class="container mx-auto px-4">
-        <h2 class="text-4xl font-bold text-center mb-4 text-gray-900" id="availableBooksTitle">Available Books</h2>
-        <p class="text-center text-gray-600 mb-12" id="clickToRequest">Click on a book to request it</p>
+        <h2 class="text-4xl font-bold text-center mb-4 text-gray-900" id="availableBooksTitle">کتێبە بەردەستەکان</h2>
+        <p class="text-center text-gray-600 mb-12" id="clickToRequest">کلیک لەسەر کتێبەکە بکە بۆ داواکردن</p>
         <div class="flex flex-wrap justify-center gap-3 mb-10">
             <button onclick="filterCategory('all')" id="catAll" class="px-5 py-2 rounded-full bg-blue-600 text-white font-medium">All</button>
             <button onclick="filterCategory('kurdish')" id="catKurdish" class="px-5 py-2 rounded-full bg-gray-200 text-gray-700 font-medium">Kurdish</button>
@@ -150,7 +128,7 @@
             <button onclick="filterCategory('english')" id="catEnglish" class="px-5 py-2 rounded-full bg-gray-200 text-gray-700 font-medium">English</button>
         </div>
         <!-- Search Bar -->
-<div class="max-w-2xl mx-auto mb-8 px-4">
+        <div id="searchBarContainer" class="hidden max-w-2xl mx-auto mb-8 px-4">
     <div class="relative">
         <input 
     type="text" 
@@ -159,7 +137,7 @@
     autocomplete="new-password"
     readonly
     onfocus="this.removeAttribute('readonly')"
-    placeholder="🔍 Search by title, author, or genre..." 
+    placeholder="🔍 بگەڕێ بە ناونیشان، نووسەر، یان جۆر..."
     class="w-full px-6 py-3 pl-12 pr-12 text-gray-700 bg-gray-50 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
     onkeyup="searchBooks()" >
         <svg class="absolute left-4 top-3.5 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -170,9 +148,12 @@
         </button>
     </div>
 </div>
-        <div class="flex flex-wrap justify-center gap-3 mb-10" id="genreFilterRow">
-            <button onclick="filterGenre('all')" id="genreAll" class="px-4 py-1.5 rounded-full bg-gray-800 text-white text-sm font-medium">All Genres</button>
-        </div> 
+<div class="flex flex-wrap justify-center gap-2 mb-10 px-4" id="genreFilterRow">
+    <button onclick="filterGenre('all')" id="genreAll" class="px-4 py-2 rounded-full bg-blue-600 text-white text-sm font-medium flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        All Genres
+    </button>
+</div>
         <div id="booksGrid" class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-4">
             <!-- Books will be inserted here by JavaScript -->
         </div>
@@ -311,7 +292,7 @@ import { translations, loadBooks, loadRequests, addRequestToDb, signUp, logIn, l
 window.onerror = function(message, source, lineno, colno, error) {
     alert("ERROR: " + message + " (line " + lineno + ")");
 };
-let currentLanguage = "en";
+let currentLanguage = "ku";
     let books = [];
     let requests = [];
     let selectedBookForRequest = null;
@@ -322,82 +303,56 @@ let currentLanguage = "en";
 
     window.addEventListener('DOMContentLoaded', async function() {
         books = await loadBooks();
-        renderGenreButtons();
         requests = await loadRequests();
-        renderBooks();
+        switchLanguage('ku');
         AOS.init({ duration: 800, once: true });
 
         watchAuthState(async function(user) {
             currentUser = user;
-            updateAuthUI();
             if (currentUser) {
                 userFavorites = await loadUserFavorites(currentUser.uid);
                 userCart = await loadUserCart(currentUser.uid);
+                document.getElementById('heroSection').style.display = 'none';
             } else {
                 userFavorites = [];
                 userCart = [];
+                document.getElementById('heroSection').style.display = '';
             }
             updateCartCount();
             renderBooks();
         });
     });
-
     function updateAuthUI() {
-        const loginBtn = document.getElementById('loginBtn');
-        const signupBtn = document.getElementById('signupBtn');
-        const userInfo = document.getElementById('userInfo');
-        const userEmail = document.getElementById('userEmail');
-
-        const loginBtn_m = document.getElementById('loginBtn_m');
-        const signupBtn_m = document.getElementById('signupBtn_m');
-        const userInfo_m = document.getElementById('userInfo_m');
-        const userEmail_m = document.getElementById('userEmail_m');
+        const loggedOut = document.getElementById('profileLoggedOut');
+        const loggedIn = document.getElementById('profileLoggedIn');
+        const profileEmail = document.getElementById('profileEmail');
 
         if (currentUser) {
-            loginBtn.classList.add('hidden');
-            signupBtn.classList.add('hidden');
-            userInfo.classList.remove('hidden');
-            userInfo.classList.add('flex');
-            userEmail.textContent = currentUser.email;
-
-            loginBtn_m.classList.add('hidden');
-            signupBtn_m.classList.add('hidden');
-            userInfo_m.classList.remove('hidden');
-            userInfo_m.classList.add('flex');
-            userEmail_m.textContent = currentUser.email;
+            loggedOut.classList.add('hidden');
+            loggedIn.classList.remove('hidden');
+            profileEmail.textContent = currentUser.email;
         } else {
-            loginBtn.classList.remove('hidden');
-            signupBtn.classList.remove('hidden');
-            userInfo.classList.add('hidden');
-            userInfo.classList.remove('flex');
-
-            loginBtn_m.classList.remove('hidden');
-            signupBtn_m.classList.remove('hidden');
-            userInfo_m.classList.add('hidden');
-            userInfo_m.classList.remove('flex');
+            loggedOut.classList.remove('hidden');
+            loggedIn.classList.add('hidden');
         }
+    }
+    function toggleProfileMenu() {
+        document.getElementById('profileDropdown').classList.toggle('hidden');
+    }
+
+    function focusSearchBar() {
+        const container = document.getElementById('searchBarContainer');
+        container.classList.toggle('hidden');
+        if (!container.classList.contains('hidden')) {
+            document.getElementById('searchInput').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            document.getElementById('searchInput').focus();
+        }
+    }
+    function handleHeartIconClick() {
+        openFavoritesModal();
     }
     function toggleMobileMenu() {
-        document.getElementById('mobileMenu').classList.toggle('hidden');
-    }
-    async function handleToggleFavorite(bookId, event) {
-        event.stopPropagation();
-
-        if (!currentUser) {
-            alert('Please log in to save favorites');
-            openAuthModal('login');
-            return;
-        }
-
-        const isNowFavorited = await toggleFavorite(currentUser.uid, bookId);
-
-        if (isNowFavorited) {
-            userFavorites.push(bookId);
-        } else {
-            userFavorites = userFavorites.filter(id => id !== bookId);
-        }
-
-        renderBooks();
+        document.getElementById('booksSection').scrollIntoView({ behavior: 'smooth' });
     }
     function openFavoritesModal() {
         if (!currentUser) {
@@ -515,17 +470,12 @@ let currentLanguage = "en";
 document.getElementById('btnAR').className = lang === 'ar' ? 'px-3 py-1 rounded bg-blue-600 text-white flex items-center gap-1 text-sm' : 'px-3 py-1 rounded bg-gray-200 text-gray-700 flex items-center gap-1 text-sm';
 document.getElementById('btnKU').className = lang === 'ku' ? 'px-3 py-1 rounded bg-blue-600 text-white flex items-center gap-1 text-sm' : 'px-3 py-1 rounded bg-gray-200 text-gray-700 flex items-center gap-1 text-sm';
 
-document.getElementById('btnEN_m').className = lang === 'en' ? 'px-3 py-1 rounded bg-blue-600 text-white flex items-center gap-1 text-sm' : 'px-3 py-1 rounded bg-gray-200 text-gray-700 flex items-center gap-1 text-sm';
-document.getElementById('btnAR_m').className = lang === 'ar' ? 'px-3 py-1 rounded bg-blue-600 text-white flex items-center gap-1 text-sm' : 'px-3 py-1 rounded bg-gray-200 text-gray-700 flex items-center gap-1 text-sm';
-document.getElementById('btnKU_m').className = lang === 'ku' ? 'px-3 py-1 rounded bg-blue-600 text-white flex items-center gap-1 text-sm' : 'px-3 py-1 rounded bg-gray-200 text-gray-700 flex items-center gap-1 text-sm';
+
         const isRTL = lang === 'ar' || lang === 'ku';
         document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
         document.body.dir = isRTL ? 'rtl' : 'ltr';
 
         const t = translations[lang];
-        document.getElementById('heroTitle').textContent = t.heroTitle;
-        document.getElementById('heroDesc').textContent = t.heroDesc;
-        document.getElementById('browseBtn').textContent = t.browseBtn;
         document.getElementById('availableBooksTitle').textContent = t.availableBooksTitle;
         document.getElementById('clickToRequest').textContent = t.clickToRequest;
         document.getElementById('contactUs').textContent = t.contactUs;
@@ -535,8 +485,7 @@ document.getElementById('btnKU_m').className = lang === 'ku' ? 'px-3 py-1 rounde
         document.getElementById('footerBooks').textContent = t.footerBooks;
         document.getElementById('footerTagline').textContent = t.footerTagline;
         document.getElementById('copyright').textContent = t.copyright;
-        document.getElementById('navHome').textContent = t.navHome;
-document.getElementById('navBrowse').textContent = t.navBrowse;
+       
 document.getElementById('searchInput').placeholder = t.searchPlaceholder;
         document.getElementById('requestTitle').textContent = t.requestTitle;
 
@@ -574,20 +523,32 @@ function filterGenre(genre) {
     currentGenre = genre;
 
     document.querySelectorAll('#genreFilterRow button').forEach(btn => {
-        if (btn.id === 'genre' + genre.replace(/[^a-zA-Z0-9]/g, '')) {
-            btn.className = 'px-4 py-1.5 rounded-full bg-gray-800 text-white text-sm font-medium';
+        if (btn.id === (genre === 'all' ? 'genreAll' : 'genre' + genre.replace(/[^a-zA-Z0-9]/g, ''))) {
+            btn.className = 'px-4 py-2 rounded-full bg-blue-600 text-white text-sm font-medium flex items-center gap-2';
         } else {
-            btn.className = 'px-4 py-1.5 rounded-full bg-gray-200 text-gray-700 text-sm font-medium';
+            btn.className = 'px-4 py-2 rounded-full bg-white border border-gray-300 text-gray-700 text-sm font-medium flex items-center gap-2';
         }
     });
 
     renderBooks();
 }
-function renderGenreButtons() {
+const genreIcons = {
+        'Medical': '<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"></path></svg>',
+        'History': '<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="3" y1="22" x2="21" y2="22"></line><line x1="6" y1="18" x2="6" y2="11"></line><line x1="10" y1="18" x2="10" y2="11"></line><line x1="14" y1="18" x2="14" y2="11"></line><line x1="18" y1="18" x2="18" y2="11"></line><polygon points="12 2 21 8 3 8"></polygon></svg>',
+        'Religion': '<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V10l7-6 7 6v11M9 21v-6h6v6"></path></svg>',
+        'Novels/Fiction': '<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>',
+        "Children's Books": '<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="8" cy="10" r="1"></circle><circle cx="16" cy="10" r="1"></circle><path d="M8 15c1 1 2.5 1.5 4 1.5s3-.5 4-1.5"></path></svg>',
+        'Self-Help': '<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"></circle><path d="M20 21a8 8 0 1 0-16 0"></path></svg>',
+        'Psychological': '<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9.5 2a5.5 5.5 0 0 0-5.44 6.4A4 4 0 0 0 6 16a5.5 5.5 0 0 0 8 4.9M14.5 2a5.5 5.5 0 0 1 5.44 6.4A4 4 0 0 1 18 16a5.5 5.5 0 0 1-8 4.9"></path><path d="M9.5 2v20M14.5 2v20"></path></svg>',
+        'Horror': '<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 10h.01M15 10h.01M9.5 15.5c.7.7 1.6 1 2.5 1s1.8-.3 2.5-1M4 12a8 8 0 1 1 16 0v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-6z"></path></svg>'
+    };
+    const defaultGenreIcon = '<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>';
+
+    function renderGenreButtons() {
     const row = document.getElementById('genreFilterRow');
     const genreKeys = [...new Set(books.map(b => b.genre).filter(g => g))];
 
-    row.innerHTML = '<button onclick="filterGenre(\'all\')" id="genreAll" class="px-4 py-1.5 rounded-full bg-gray-800 text-white text-sm font-medium">All Genres</button>';
+    row.innerHTML = '<button onclick="filterGenre(\'all\')" id="genreAll" class="px-4 py-2 rounded-full bg-blue-600 text-white text-sm font-medium flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>All Genres</button>';
 
     genreKeys.forEach(genreKey => {
         const bookWithGenre = books.find(b => b.genre === genreKey);
@@ -601,13 +562,14 @@ function renderGenreButtons() {
             translatedGenre = bookWithGenre.genre_ku;
         }
 
+        const icon = genreIcons[genreKey] || defaultGenreIcon;
         const safeId = 'genre' + genreKey.replace(/[^a-zA-Z0-9]/g, '');
         const btn = document.createElement('button');
         btn.id = safeId;
         btn.dataset.genreKey = genreKey;
         btn.onclick = () => filterGenre(genreKey);
-        btn.className = 'px-4 py-1.5 rounded-full bg-gray-200 text-gray-700 text-sm font-medium';
-        btn.textContent = translatedGenre;
+        btn.className = 'px-4 py-2 rounded-full bg-white border border-gray-300 text-gray-700 text-sm font-medium flex items-center gap-2';
+        btn.innerHTML = icon + '<span>' + translatedGenre + '</span>';
         row.appendChild(btn);
     });
 }
@@ -795,7 +757,6 @@ async function handleModalFavorite() {
     function updateCartCount() {
         const count = userCart.length;
         const cartCount = document.getElementById('cartCount');
-        const cartCount_m = document.getElementById('cartCount_m');
 
         if (count > 0) {
             cartCount.textContent = count;
@@ -803,7 +764,6 @@ async function handleModalFavorite() {
         } else {
             cartCount.classList.add('hidden');
         }
-        cartCount_m.textContent = count;
     }
 
     async function handleAddToCart() {
@@ -959,7 +919,6 @@ async function handleModalFavorite() {
     window.handleEmailAuth = handleEmailAuth;
     window.handleGoogleAuth = handleGoogleAuth;
     window.handleLogOut = handleLogOut;
-    window.handleToggleFavorite = handleToggleFavorite;
     window.openDetailsModal = openDetailsModal;
 window.closeDetailsModal = closeDetailsModal;
     window.openFavoritesModal = openFavoritesModal;
@@ -982,9 +941,7 @@ window.submitRequest = submitRequest;
 window.openAuthModal = openAuthModal;
     window.closeAuthModal = closeAuthModal;
     window.switchAuthMode = switchAuthMode;
-
     window.handleLogOut = handleLogOut;
-    window.handleToggleFavorite = handleToggleFavorite;
     window.openDetailsModal = openDetailsModal;
 window.closeDetailsModal = closeDetailsModal;
     window.openFavoritesModal = openFavoritesModal;
@@ -999,7 +956,9 @@ window.closeCartModal = closeCartModal;
 window.handleAddToCart = handleAddToCart;
 window.removeCartItem = removeCartItem;
 window.submitCartOrder = submitCartOrder;
+window.toggleProfileMenu = toggleProfileMenu;
+window.focusSearchBar = focusSearchBar;
+window.handleHeartIconClick = handleHeartIconClick;
 </script>
-
 </body>
 </html>
