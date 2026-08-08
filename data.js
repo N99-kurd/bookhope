@@ -1,7 +1,7 @@
 // ===== FIREBASE SETUP =====
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-app.js";
 import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, updateDoc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-firestore.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-auth.js";
 const firebaseConfig = {
     apiKey: "AIzaSyBU7XDZfTm4rGDH2LxeAYM1oRSXtBCpx8s",
     authDomain: "bookhope-6c62e.firebaseapp.com",
@@ -202,27 +202,22 @@ async function deleteRequestFromDb(firestoreId) {
     await deleteDoc(doc(db, "requests", firestoreId));
 }
 // ===== AUTH FUNCTIONS =====
-async function signUp(name, phone, password) {
-    const fakeEmail = phone.replace(/[^0-9]/g, '') + '@bookhope.app';
-    const userCredential = await createUserWithEmailAndPassword(auth, fakeEmail, password);
-    await updateProfile(userCredential.user, { displayName: name });
-    await setDoc(doc(db, "users", userCredential.user.uid), {
-        name: name,
-        phone: phone
-    });
+async function signUp(email, password) {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     return userCredential.user;
 }
 
-async function logIn(phone, password) {
-    const fakeEmail = phone.replace(/[^0-9]/g, '') + '@bookhope.app';
-    const userCredential = await signInWithEmailAndPassword(auth, fakeEmail, password);
+async function logIn(email, password) {
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
     return userCredential.user;
 }
+
 async function logInWithGoogle() {
     const provider = new GoogleAuthProvider();
     const userCredential = await signInWithPopup(auth, provider);
     return userCredential.user;
 }
+
 
 async function logOut() {
     await signOut(auth);
@@ -259,6 +254,28 @@ window.deleteBookFromDb = deleteBookFromDb;
 window.loadRequests = loadRequests;
 window.addRequestToDb = addRequestToDb;
 window.deleteRequestFromDb = deleteRequestFromDb
+// ===== CART FUNCTIONS =====
+async function addToCart(userId, bookId) {
+    await setDoc(doc(db, "carts", userId + "_" + bookId), { userId: userId, bookId: bookId });
+}
+
+async function removeFromCart(userId, bookId) {
+    await deleteDoc(doc(db, "carts", userId + "_" + bookId));
+}
+
+async function loadUserCart(userId) {
+    const snapshot = await getDocs(collection(db, "carts"));
+    return snapshot.docs
+        .map(docSnap => docSnap.data())
+        .filter(item => item.userId === userId)
+        .map(item => item.bookId);
+}
+
+async function clearUserCart(userId, bookIds) {
+    for (const bookId of bookIds) {
+        await deleteDoc(doc(db, "carts", userId + "_" + bookId));
+    }
+}
 // Add exports at the very bottom of data.js:
 export { 
     translations, 
@@ -276,5 +293,9 @@ export {
     watchAuthState,
     toggleFavorite,
     loadUserFavorites,
-    genreTranslations
-  };
+    genreTranslations,
+    addToCart,
+    removeFromCart,
+    loadUserCart,
+    clearUserCart
+  }
