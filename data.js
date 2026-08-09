@@ -1,7 +1,7 @@
 // ===== FIREBASE SETUP =====
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-app.js";
 import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, updateDoc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-firestore.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithRedirect, getRedirectResult } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-auth.js";
 const firebaseConfig = {
     apiKey: "AIzaSyBU7XDZfTm4rGDH2LxeAYM1oRSXtBCpx8s",
     authDomain: "bookhope-6c62e.firebaseapp.com",
@@ -44,6 +44,9 @@ navBrowse: "Browse Books",
         bookDeleted: "Book deleted successfully!",
         requestDeleted: "Request deleted successfully!",
         searchPlaceholder: "Search by title, author, or genre...",
+        heroTitle: "Find Your Next Great Read",
+heroDesc: "Explore books across all genres and find your favorite stories.",
+browseBtn: "Browse Books",
     },
     ar: {
         heroTitle: "شارك المعرفة، غيّر الحياة",
@@ -72,6 +75,12 @@ navBrowse: "تصفح الكتب",
         bookDeleted: "تم حذف الكتاب بنجاح!",
         requestDeleted: "تم حذف الطلب بنجاح!",
         searchPlaceholder: "ابحث بالعنوان أو المؤلف أو النوع...",
+        heroTitle: "اعثر على قراءتك القادمة",
+heroDesc: "تصفح الكتب من جميع الأنواع واعثر على قصصك المفضلة.",
+browseBtn: "تصفح الكتب",
+heroTitle: "کتێبە بەردەستەکان بدۆزەرەوە",
+heroDesc: "گەڕان لە هەموو جۆرەکاندا و دۆزینەوەی چیرۆکە خۆشەویستەکانت",
+browseBtn: "گەڕان لە کتێبەکاندا",
     },
     ku: {
         heroTitle: "زانیاری بڵاو بکە، ژیان بگۆڕە",
@@ -214,8 +223,12 @@ async function logIn(email, password) {
 
 async function logInWithGoogle() {
     const provider = new GoogleAuthProvider();
-    const userCredential = await signInWithPopup(auth, provider);
-    return userCredential.user;
+    await signInWithRedirect(auth, provider);
+}
+
+async function checkRedirectResult() {
+    const result = await getRedirectResult(auth);
+    return result ? result.user : null;
 }
 
 
