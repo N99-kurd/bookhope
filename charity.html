@@ -314,7 +314,7 @@ let currentLanguage = "ku";
     window.addEventListener('DOMContentLoaded', async function() {
         books = await loadBooks();
         requests = await loadRequests();
-        const redirectUser = await checkRedirectResult();
+        await checkRedirectResult();
         switchLanguage('ku');
         AOS.init({ duration: 800, once: true });
 
