@@ -302,6 +302,7 @@ export {
     signUp,
     logIn,
     logInWithGoogle,
+    checkRedirectResult,
     logOut,
     watchAuthState,
     toggleFavorite,
