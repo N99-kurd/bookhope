@@ -266,7 +266,7 @@
         <div class="flex justify-between items-start mb-4">
             <h2 class="text-2xl font-bold flex-1 pr-2" id="detailsTitle">Book Title</h2>
             <div class="flex items-center gap-2">
-                <button onclick="handleModalFavorite()" id="detailsHeartBtn" class="text-2xl">🤍</button>
+                <button onclick="handleModalFavorite()" id="detailsHeartBtn" class="text-2xl" style="color: #d1d5db;">♥️</button>
                 <button onclick="closeDetailsModal()" class="text-gray-500 hover:text-gray-700 text-2xl">✕</button>
             </div>
         </div>
@@ -298,7 +298,7 @@
 <script type="module" src="data.js"></script>
 
 <script type="module">
-import { translations, loadBooks, loadRequests, addRequestToDb, signUp, logIn, logInWithGoogle, logOut, watchAuthState, toggleFavorite, loadUserFavorites, genreTranslations, addToCart, removeFromCart, loadUserCart, clearUserCart,checkRedirectResult } from './data.js';
+import { translations, loadBooks, loadRequests, addRequestToDb, signUp, logIn, logInWithGoogle, logOut, watchAuthState, toggleFavorite, loadUserFavorites, genreTranslations, addToCart, removeFromCart, loadUserCart, clearUserCart } from './data.js';
 window.onerror = function(message, source, lineno, colno, error) {
     alert("ERROR: " + message + " (line " + lineno + ")");
 };
@@ -314,7 +314,7 @@ let currentLanguage = "ku";
     window.addEventListener('DOMContentLoaded', async function() {
         books = await loadBooks();
         requests = await loadRequests();
-        await checkRedirectResult();
+      
         switchLanguage('ku');
         AOS.init({ duration: 800, once: true });
 
@@ -459,10 +459,13 @@ let currentLanguage = "ku";
         try {
             if (authMode === 'login') {
                 await logIn(email, password);
+                closeAuthModal();
             } else {
                 await signUp(email, password);
+                alert('Account created! Please check your email inbox and click the verification link before logging in.');
+                closeAuthModal();
+                switchAuthMode();
             }
-            closeAuthModal();
         } catch (error) {
             alert(error.message);
         }
@@ -471,6 +474,7 @@ let currentLanguage = "ku";
     async function handleGoogleAuth() {
         try {
             await logInWithGoogle();
+            closeAuthModal();
         } catch (error) {
             alert(error.message);
         }
@@ -743,8 +747,9 @@ function openDetailsModal(firestoreId) {
     document.getElementById('detailsDesc').textContent = desc;
 
     const heartBtn = document.getElementById('detailsHeartBtn');
-    const isFav = userFavorites.includes(firestoreId);
-    heartBtn.textContent = isFav ? '❤️' : '🤍';
+        const isFav = userFavorites.includes(firestoreId);
+        heartBtn.textContent = '♥️';
+        heartBtn.style.color = isFav ? '#dc2626' : '#d1d5db';
     const actionArea2 = document.getElementById('detailsActionArea');
     const actionArea = document.getElementById('detailsActionArea');
         if (currentUser) {
@@ -771,7 +776,9 @@ async function handleModalFavorite() {
             userFavorites = userFavorites.filter(id => id !== currentDetailsBookId);
         }
 
-        document.getElementById('detailsHeartBtn').textContent = isNowFavorited ? '❤️' : '🤍';
+        const heartBtn = document.getElementById('detailsHeartBtn');
+        heartBtn.textContent = '♥️';
+        heartBtn.style.color = isNowFavorited ? '#dc2626' : '#d1d5db';
     }
     function updateCartCount() {
         const count = userCart.length;
