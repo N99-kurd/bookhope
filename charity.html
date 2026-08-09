@@ -298,7 +298,7 @@
 <script type="module" src="data.js"></script>
 
 <script type="module">
-import { translations, loadBooks, loadRequests, addRequestToDb, signUp, logIn, logInWithGoogle, logOut, watchAuthState, toggleFavorite, loadUserFavorites, genreTranslations, addToCart, removeFromCart, loadUserCart, clearUserCart } from './data.js';
+import { translations, loadBooks, loadRequests, addRequestToDb, signUp, logIn, logInWithGoogle, logOut, watchAuthState, toggleFavorite, loadUserFavorites, genreTranslations, addToCart, removeFromCart, loadUserCart, clearUserCart,checkRedirectResult } from './data.js';
 window.onerror = function(message, source, lineno, colno, error) {
     alert("ERROR: " + message + " (line " + lineno + ")");
 };
@@ -314,6 +314,7 @@ let currentLanguage = "ku";
     window.addEventListener('DOMContentLoaded', async function() {
         books = await loadBooks();
         requests = await loadRequests();
+        const redirectUser = await checkRedirectResult();
         switchLanguage('ku');
         AOS.init({ duration: 800, once: true });
 
@@ -470,7 +471,6 @@ let currentLanguage = "ku";
     async function handleGoogleAuth() {
         try {
             await logInWithGoogle();
-            closeAuthModal();
         } catch (error) {
             alert(error.message);
         }
