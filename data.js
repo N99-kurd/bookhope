@@ -47,6 +47,13 @@ navBrowse: "Browse Books",
         heroTitle: "Find Your Next Great Read",
 heroDesc: "Explore books across all genres and find your favorite stories.",
 browseBtn: "Browse Books",
+addToCartBtn: "Add to Cart",
+allGenresBtn: "All Genres",
+catAllBtn: "All",
+catKurdishBtn: "كوردى",
+catArabicBtn: "العربية",
+catTurkishBtn: "Turkce",
+catEnglishBtn: "English",
     },
     ar: {
         heroTitle: "شارك المعرفة، غيّر الحياة",
@@ -75,6 +82,13 @@ browseBtn: "Browse Books",
         navBrowse: "تصفح الكتب",
         searchPlaceholder: "ابحث بالعنوان أو المؤلف أو النوع...",
         detailsBtn: "التفاصيل",
+        addToCartBtn: "أضف إلى السلة",
+allGenresBtn: "كل الأنواع",
+catAllBtn: "الكل",
+catKurdishBtn: "كوردى",
+catArabicBtn: "العربية",
+catTurkishBtn: "Turkce",
+catEnglishBtn: "English",
     },
     ku: {
         heroTitle:"ب خاندنا پەرتووکەکێ، جیهانەکێ ڕووناهی بکە",
@@ -102,7 +116,14 @@ navBrowse: "گەڕان لە کتێبەکاندا",
         bookAdded: "پەرتووک ب سەرکەفتیانە هاتە زێدەکرن!",
         bookDeleted: "پەرتووک ب سەرکەفتیانە هاتە ژێبرن",
         requestDeleted: "داخازى ب سەرکەفتیانە هاتە ژێبرن!",
-        searchPlaceholder: "...بگەرێ ل سەر ناڤنیشان، نڤیسەر، یاخوود جۆر"
+        searchPlaceholder: "...بگەره ل سەر ناڤنیشان، نڤیسەر، یاخوود جۆر",
+        addToCartBtn: "زێدەکرن بۆ سەبەتێ",
+allGenresBtn: "هەمی جۆر",
+catAllBtn: "هەمی",
+catKurdishBtn: "کوردی",
+catArabicBtn: "العربية",
+catTurkishBtn: "Turkce",
+catEnglishBtn: "English",
     }
     
 };
@@ -128,7 +149,7 @@ const genreTranslations = {
         History: "مێژوو",
         Religion: "ئایین",
         "Novels/Fiction": "ڕۆمان/خەیاڵی",
-        "Children's Books": "کتێبی منداڵان",
+        "Children's Books": "پەرتووکین زاروكان ",
         "Self-Help": "خۆپاراستن"
     }
 };
