@@ -118,9 +118,12 @@
 <section id="heroSection" class="hero-gradient py-12 md:py-20">
     <div class="container mx-auto px-4 grid md:grid-cols-2 gap-8 md:gap-10 items-center">
         <div class="text-center md:text-left">
-            <h2 class="text-2xl sm:text-3xl md:text-5xl font-bold mb-4 text-gray-900 leading-tight" id="heroTitle">کتێبە بەردەستەکان بدۆزەرەوە</h2>
-            <p class="text-base md:text-xl text-gray-600 mb-6 md:mb-8" id="heroDesc">گەڕان لە هەموو جۆرەکاندا و دۆزینەوەی چیرۆکە خۆشەویستەکانت</p>
-            <button onclick="scrollToBooks()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 md:px-8 py-3 text-base md:text-lg rounded-lg shadow-md" id="browseBtn">گەڕان لە کتێبەکاندا</button>
+            <h2 class="text-2xl sm:text-3xl md:text-5xl font-bold mb-4 text-gray-900 leading-tight" id="heroTitle">ب خاندنا پەرتووکەکێ، جیهانەکێ ڕووناهی بکه
+                    </h2>
+                            <p class="text-base md:text-xl text-gray-600 mb-6 md:mb-8" id="heroDesc"> 
+                 ئەو پەرتوکێن تە دڤێت بخوینی داخاز بکە، ئەم دێ بو تە هنێرین
+                 </p>
+                            <button onclick="scrollToBooks()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 md:px-8 py-3 text-base md:text-lg rounded-lg shadow-md" id="browseBtn"> ل پەرتوکان بگەرە</button>
         </div>
         <div class="flex justify-center text-6xl md:text-8xl">📚</div>
     </div>
@@ -128,8 +131,8 @@
 <!-- Books Section -->
 <section id="booksSection" class="py-20 bg-white">
     <div class="container mx-auto px-4">
-        <h2 class="text-4xl font-bold text-center mb-4 text-gray-900" id="availableBooksTitle">کتێبە بەردەستەکان</h2>
-        <p class="text-center text-gray-600 mb-12" id="clickToRequest">کلیک لەسەر کتێبەکە بکە بۆ داواکردن</p>
+        <h2 class="text-4xl font-bold text-center mb-4 text-gray-900" id="availableBooksTitle"> پەرتوکێن بەردەست</h2>
+        <p class="text-center text-gray-600 mb-12" id="clickToRequest">    كليك بکە بۆ داخازكرنێ </p>
         <div class="flex flex-wrap justify-center gap-3 mb-10">
             <button onclick="filterCategory('all')" id="catAll" class="px-5 py-2 rounded-full bg-blue-600 text-white font-medium">All</button>
             <button onclick="filterCategory('kurdish')" id="catKurdish" class="px-5 py-2 rounded-full bg-gray-200 text-gray-700 font-medium">Kurdish</button>
@@ -269,6 +272,11 @@
             <button onclick="closeAuthModal()" class="w-full bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 rounded-lg font-medium">Cancel</button>
         </div>
     </div>
+</div>
+<!-- Image Lightbox -->
+<div id="imageLightbox" class="hidden fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-50" onclick="closeLightbox()">
+    <img id="lightboxImage" src="" alt="" class="max-w-full max-h-full object-contain rounded-lg">
+    <button onclick="closeLightbox()" class="absolute top-4 right-4 text-white text-3xl">✕</button>
 </div>
 <!-- Book Details Modal -->
 <div id="detailsModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
@@ -497,9 +505,8 @@ let currentLanguage = "ku";
         currentLanguage = lang;
 
         document.getElementById('btnEN').className = lang === 'en' ? 'px-3 py-1 rounded bg-blue-600 text-white flex items-center gap-1 text-sm' : 'px-3 py-1 rounded bg-gray-200 text-gray-700 flex items-center gap-1 text-sm';
-document.getElementById('btnAR').className = lang === 'ar' ? 'px-3 py-1 rounded bg-blue-600 text-white flex items-center gap-1 text-sm' : 'px-3 py-1 rounded bg-gray-200 text-gray-700 flex items-center gap-1 text-sm';
-document.getElementById('btnKU').className = lang === 'ku' ? 'px-3 py-1 rounded bg-blue-600 text-white flex items-center gap-1 text-sm' : 'px-3 py-1 rounded bg-gray-200 text-gray-700 flex items-center gap-1 text-sm';
-
+        document.getElementById('btnAR').className = lang === 'ar' ? 'px-3 py-1 rounded bg-blue-600 text-white flex items-center gap-1 text-sm' : 'px-3 py-1 rounded bg-gray-200 text-gray-700 flex items-center gap-1 text-sm';
+        document.getElementById('btnKU').className = lang === 'ku' ? 'px-3 py-1 rounded bg-blue-600 text-white flex items-center gap-1 text-sm' : 'px-3 py-1 rounded bg-gray-200 text-gray-700 flex items-center gap-1 text-sm';
 
         const isRTL = lang === 'ar' || lang === 'ku';
         document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
@@ -518,18 +525,22 @@ document.getElementById('btnKU').className = lang === 'ku' ? 'px-3 py-1 rounded 
         document.getElementById('heroTitle').textContent = t.heroTitle;
         document.getElementById('heroDesc').textContent = t.heroDesc;
         document.getElementById('browseBtn').textContent = t.browseBtn;
-       
-document.getElementById('searchInput').placeholder = t.searchPlaceholder;
+        document.getElementById('searchInput').placeholder = t.searchPlaceholder;
+        document.getElementById('catAll').textContent = t.catAllBtn;
+        document.getElementById('catKurdish').textContent = t.catKurdishBtn;
+        document.getElementById('catArabic').textContent = t.catArabicBtn;
+        document.getElementById('catTurkish').textContent = t.catTurkishBtn;
+        document.getElementById('catEnglish').textContent = t.catEnglishBtn;
         document.getElementById('requestTitle').textContent = t.requestTitle;
 
         renderGenreButtons();
-renderBooks();
-    }    
+        renderBooks();
+    }
     let currentCategory = 'all';
     let currentGenre = 'all';
     function scrollToBooks() {
-    document.getElementById('booksSection').scrollIntoView({ behavior: 'smooth' });
-}
+        document.getElementById('booksSection').scrollIntoView({ behavior: 'smooth' });
+    }
 function filterCategory(category) {
     currentCategory = category;
 
@@ -581,7 +592,7 @@ const genreIcons = {
     const row = document.getElementById('genreFilterRow');
     const genreKeys = [...new Set(books.map(b => b.genre).filter(g => g))];
 
-    row.innerHTML = '<button onclick="filterGenre(\'all\')" id="genreAll" class="px-4 py-2 rounded-full bg-blue-600 text-white text-sm font-medium flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>All Genres</button>';
+    row.innerHTML = '<button onclick="filterGenre(\'all\')" id="genreAll" class="px-4 py-2 rounded-full bg-blue-600 text-white text-sm font-medium flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>' + translations[currentLanguage].allGenresBtn + '</button>';
 
     genreKeys.forEach(genreKey => {
         const bookWithGenre = books.find(b => b.genre === genreKey);
@@ -653,7 +664,7 @@ const isFavorited = userFavorites.includes(book.firestoreId);
                 <div class="mb-1 flex flex-wrap gap-0.5">${genreTag}</div>
                 <p class="font-bold text-blue-600 text-xs md:text-sm mb-1">${(book.price || 0).toLocaleString()} د.ع</p>
                 <div class="flex-1"></div>
-                <button onclick="handleAddToCart('${book.firestoreId}')" class="w-full bg-green-600 hover:bg-green-700 text-white py-1 rounded-md font-medium text-[10px] md:text-xs">Add to Cart</button>
+                <button onclick="handleAddToCart('${book.firestoreId}')" class="w-full bg-green-600 hover:bg-green-700 text-white py-1 rounded-md font-medium text-[10px] md:text-xs">${translations[currentLanguage].addToCartBtn}</button>
             </div>
         `;
         grid.appendChild(card);
@@ -762,7 +773,7 @@ function openDetailsModal(firestoreId) {
         heartBtn.style.color = isFav ? '#dc2626' : '#d1d5db';
     const actionArea2 = document.getElementById('detailsActionArea');
     const actionArea = document.getElementById('detailsActionArea');
-        actionArea.innerHTML = '<button onclick="handleAddToCart()" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded font-medium">Add to Cart</button>';
+        actionArea.innerHTML = '<button onclick="handleAddToCart()" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded font-medium">' + translations[currentLanguage].addToCartBtn + '</button>';
         document.getElementById('detailsModal').classList.remove('hidden');
     }
 
@@ -836,6 +847,15 @@ async function handleModalFavorite() {
         document.getElementById('cartToast').classList.add('hidden');
         clearTimeout(window.toastTimer);
     } 
+    function openLightbox(imageUrl, event) {
+        if (event) event.stopPropagation();
+        document.getElementById('lightboxImage').src = imageUrl;
+        document.getElementById('imageLightbox').classList.remove('hidden');
+    }
+
+    function closeLightbox() {
+        document.getElementById('imageLightbox').classList.add('hidden');
+    }
     function openCartModal() {
         renderCart();
         document.getElementById('cartModal').classList.remove('hidden');
@@ -1011,6 +1031,8 @@ window.focusSearchBar = focusSearchBar;
 window.handleHeartIconClick = handleHeartIconClick;
 window.removeFavoriteItem = removeFavoriteItem;
 window.closeCartToast = closeCartToast;
+window.openLightbox = openLightbox;
+window.closeLightbox = closeLightbox;
 </script>
 
 </body>
